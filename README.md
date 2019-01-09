@@ -6,5 +6,12 @@ Repository for docker image files, for testing nix services
 To build an image.
 
 ```
-docker build --rm --no-cache -t centos7:systemd . -f centos_7dockerfile
+docker build --rm --no-cache -t waffleimage/centos7 . -f centos_7dockerfile
+```
+
+Push said image
+
+```
+# docker login
+docker image push waffleimage/centos7
 ```
