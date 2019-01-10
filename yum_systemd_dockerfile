@@ -1,4 +1,7 @@
-FROM centos:7
+ARG BASE_IMAGE_TAG
+ARG OS_TYPE
+
+FROM $OS_TYPE:$BASE_IMAGE_TAG
 
 ENV container docker
 MAINTAINER "TP Honey" tp@puppet.com
