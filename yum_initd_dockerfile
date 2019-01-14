@@ -1,0 +1,14 @@
+ARG BASE_IMAGE_TAG
+ARG OS_TYPE
+
+FROM $OS_TYPE:$BASE_IMAGE_TAG
+
+ENV container docker
+MAINTAINER "TP Honey" tp@puppet.com
+
+RUN yum -y install openssh-server openssh-clients initscripts; yum clean all; chkconfig sshd on
+
+EXPOSE 22
+
+CMD /sbin/init
+
