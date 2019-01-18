@@ -1,5 +1,7 @@
 # waffle_image
-Repository for docker image files, for testing nix services 
+Repository for docker image files, for testing nix services.
+
+It will install systemd or upstart, along with SSH
 
 Look here for the latest images https://cloud.docker.com/u/waffleimage/repository/list
 
