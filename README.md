@@ -1,7 +1,9 @@
-# waffle_image
+# litmus_image
 Repository for docker image files, for testing nix services.
 
 It will install systemd or upstart, along with SSH
+
+# NB The repository still needs to be moved and the images renamed.
 
 Look here for the latest images https://cloud.docker.com/u/waffleimage/repository/list
 
