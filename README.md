@@ -5,7 +5,7 @@ It will install systemd or upstart, along with SSH
 
 # NB The repository still needs to be moved and the images renamed.
 
-Look here for the latest images https://cloud.docker.com/u/waffleimage/repository/list
+Look here for the latest images https://hub.docker.com/u/waffleimage
 
 # Buildable images
 | Script | Supported OSes | Example Build Command |
