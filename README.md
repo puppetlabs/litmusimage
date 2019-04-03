@@ -36,4 +36,6 @@ docker exec -it waffleimage_debian9_-2223 /bin/bash
 docker attach waffleimage_ubuntu16.04_-2222
 # safely exit a container, leaving it running 
 <ctrl> + p then <ctrl> + q
+# get the latest version of the image
+docker pull debian:8
 ```
