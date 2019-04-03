@@ -40,4 +40,6 @@ docker attach waffleimage_ubuntu16.04_-2222
 docker pull debian:8
 # show the history of the image
 docker image history waffleimage/ubuntu16.04
+# remove all docker images that are on your local machine
+docker rmi $(docker images -q)
 ```
