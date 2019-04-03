@@ -38,4 +38,6 @@ docker attach waffleimage_ubuntu16.04_-2222
 <ctrl> + p then <ctrl> + q
 # get the latest version of the image
 docker pull debian:8
+# show the history of the image
+docker image history waffleimage/ubuntu16.04
 ```
