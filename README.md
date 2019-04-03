@@ -21,3 +21,19 @@ Look here for the latest images https://hub.docker.com/u/waffleimage
 # docker login
 docker image push waffleimage/centos7
 ```
+# Tips and tricks for docker wrangling
+
+```
+# List running and stopped containers
+docker container ls -a
+# remove a container
+docker rm -f ubuntu_14.04-2224
+# remove all containers
+docker rm -f $(docker ps -a -q)
+# jump into a container, force a shell
+docker exec -it waffleimage_debian9_-2223 /bin/bash
+# attach to a container ( limited by what pid 0 is)
+docker attach waffleimage_ubuntu16.04_-2222
+# safely exit a container, leaving it running 
+<ctrl> + p then <ctrl> + q
+```
