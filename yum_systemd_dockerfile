@@ -15,7 +15,8 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-RUN yum -y install openssh-server openssh-clients initscripts; yum clean all; systemctl enable sshd.service
+RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
+RUN yum -y install openssh-server openssh-clients initscripts; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
 
 EXPOSE 22
 
