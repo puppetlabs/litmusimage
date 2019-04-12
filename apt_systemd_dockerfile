@@ -5,13 +5,17 @@ FROM $OS_TYPE:$BASE_IMAGE_TAG
 MAINTAINER "TP Honey" tp@puppet.com
 
 ENV container docker
-ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-    && apt-get install -y systemd initscripts wget\
+    && apt-get install -y systemd initscripts locales locales-all wget\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
 
 RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
