@@ -1,0 +1,19 @@
+ARG BASE_IMAGE_TAG
+ARG OS_TYPE
+
+FROM $OS_TYPE:$BASE_IMAGE_TAG
+MAINTAINER "TP Honey" tp@puppet.com
+
+RUN apt-get update \
+    && apt-get install -y wget locales
+
+RUN rm /usr/sbin/policy-rc.d \
+    && rm /sbin/initctl \
+    && dpkg-divert --rename --remove /sbin/initctl \
+    && locale-gen en_US.UTF-8
+
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
+
+CMD ["/sbin/init"]
