@@ -7,6 +7,7 @@ ENV container docker
 MAINTAINER "TP Honey" tp@puppet.com
 
 RUN yum -y install openssh-server openssh-clients initscripts; yum clean all; chkconfig sshd on
+RUN echo "export RUNLEVEL=5" >> /etc/profile
 
 EXPOSE 22
 
