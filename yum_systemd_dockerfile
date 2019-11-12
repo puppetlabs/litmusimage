@@ -22,6 +22,8 @@ EXPOSE 22
 
 VOLUME /run /tmp
 
+STOPSIGNAL SIGRTMIN+3
+
 CMD /usr/sbin/init
 
 #CMD ["/bin/bash"]
