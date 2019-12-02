@@ -1,0 +1,128 @@
+name: Nightly build
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Docker login
+        env:
+          DOCKER_CRED: '${{ secrets.DockerPassword }}'
+        run: docker login -u waffleimage -p "${DOCKER_CRED}"
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Build Ubuntu 16.04
+        run: |
+          docker pull ubuntu:16.04
+          docker pull litmusimage/ubuntu:16.04
+          base_id=`docker images -q ubuntu:16.04`
+          id=`docker inspect litmusimage/ubuntu:16.04 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/ubuntu:16.04 . --label "base_image=${base_id}" -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=16.04 --build-arg OS_TYPE=ubuntu
+            docker push litmusimage/ubuntu:16.04
+          fi
+      - name: Build Ubuntu 18.04
+        run: |
+          docker pull ubuntu:18.04
+          docker pull litmusimage/ubuntu:18.04
+          base_id=`docker images -q ubuntu:18.04`
+          id=`docker inspect litmusimage/ubuntu:18.04 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/ubuntu:18.04 . --label "base_image=${base_id}" -f apt_sysvinit-utils_dockerfile --build-arg BASE_IMAGE_TAG=18.04 --build-arg OS_TYPE=ubuntu
+            docker push litmusimage/ubuntu:18.04
+          fi
+      - name: Build CentOS 6
+        run: |
+          docker pull centos:6
+          docker pull litmusimage/centos:6
+          base_id=`docker images -q centos:6`
+          id=`docker inspect litmusimage/centos:6 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/centos:6 . --label "base_image=${base_id}" -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=centos
+            docker push litmusimage/centos:6
+          fi
+      - name: Build CentOS 7
+        run: |
+          docker pull centos:7
+          docker pull litmusimage/centos:7
+          base_id=`docker images -q centos:7`
+          id=`docker inspect litmusimage/centos:7 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/centos:7 . --label "base_image=${base_id}" -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=centos
+            docker push litmusimage/centos:7
+          fi
+      - name: Build Scientificlinux 6
+        run: |
+          docker pull scientificlinux/sl:6
+          docker pull litmusimage/scientificlinux:6
+          base_id=`docker images -q scientificlinux/sl:6`
+          id=`docker inspect litmusimage/scientificlinux:6 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/scientificlinux:6 . --label "base_image=${base_id}" -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=scientificlinux/sl
+            docker push litmusimage/scientificlinux:6
+          fi
+      - name: Build Scientificlinux 7
+        run: |
+          docker pull scientificlinux/sl:7
+          docker pull litmusimage/scientificlinux:7
+          base_id=`docker images -q scientificlinux/sl:7`
+          id=`docker inspect litmusimage/scientificlinux:7 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/scientificlinux:7 . --label "base_image=${base_id}" -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=scientificlinux/sl
+            docker push litmusimage/scientificlinux:7
+          fi
+      - name: Build Oraclelinux 6
+        run: |
+          docker pull oraclelinux:6
+          docker pull litmusimage/oraclelinux:6
+          base_id=`docker images -q oraclelinux:6`
+          id=`docker inspect litmusimage/oraclelinux:6 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/oraclelinux:6 . --label "base_image=${base_id}" -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=oraclelinux
+            docker push litmusimage/oraclelinux:6
+          fi
+      - name: Build Oraclelinux 7
+        run: |
+          docker pull oraclelinux:7
+          docker pull litmusimage/oraclelinux:7
+          base_id=`docker images -q oraclelinux:7`
+          id=`docker inspect litmusimage/oraclelinux:7 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/oraclelinux:7 . --label "base_image=${base_id}" -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=oraclelinux
+            docker push litmusimage/oraclelinux:7
+          fi
+      - name: Build Debian 8
+        run: |
+          docker pull debian:8
+          docker pull litmusimage/debian:8
+          base_id=`docker images -q debian:8`
+          id=`docker inspect litmusimage/debian:8 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/debian:8 . --label "base_image=${base_id}" -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=8 --build-arg OS_TYPE=debian
+            docker push litmusimage/debian:8
+          fi
+      - name: Build Debian 9
+        run: |
+          docker pull debian:9
+          docker pull litmusimage/debian:9
+          base_id=`docker images -q debian:9`
+          id=`docker inspect litmusimage/debian:9 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/debian:9 . --label "base_image=${base_id}" -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=9 --build-arg OS_TYPE=debian
+            docker push litmusimage/debian:9
+          fi
+      - name: Build Debian 10
+        run: |
+          docker pull debian:10
+          docker pull litmusimage/debian:10
+          base_id=`docker images -q debian:10`
+          id=`docker inspect litmusimage/debian:10 --format "{{ index .Config.Labels \"base_image\"}}"`
+          if [ "$base_id" != "$id" ]; then
+            docker build --rm --no-cache -t litmusimage/debian:10 . --label "base_image=${base_id}" -f apt_sysvinit-utils_dockerfile --build-arg BASE_IMAGE_TAG=10 --build-arg OS_TYPE=debian
+            docker push litmusimage/debian:10
+          fi
