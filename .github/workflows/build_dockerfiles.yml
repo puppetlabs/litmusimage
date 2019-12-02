@@ -1,0 +1,36 @@
+name: Check dockerfiles
+
+on: push
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Build Ubuntu 14.04
+        run: docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
+      - name: Build Ubuntu 16.04
+        run: docker build --rm --no-cache -t litmusimage/ubuntu:16.04 . -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=16.04 --build-arg OS_TYPE=ubuntu
+      - name: Build Ubuntu 18.04
+        run: docker build --rm --no-cache -t litmusimage/ubuntu:18.04 . -f apt_sysvinit-utils_dockerfile --build-arg BASE_IMAGE_TAG=18.04 --build-arg OS_TYPE=ubuntu
+      - name: Build CentOS 6
+        run: docker build --rm --no-cache -t litmusimage/centos:6 . -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=centos
+      - name: Build CentOS 7
+        run: docker build --rm --no-cache -t litmusimage/centos:7 . -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=centos
+      - name: Build Scientificlinux 6
+        run: docker build --rm --no-cache -t litmusimage/scientificlinux:6 . -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=scientificlinux/sl
+      - name: Build Scientificlinux 7
+        run: docker build --rm --no-cache -t litmusimage/scientificlinux:7 . -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=scientificlinux/sl
+      - name: Build Oraclelinux 6
+        run: docker build --rm --no-cache -t litmusimage/oraclelinux:6 . -f yum_initd_dockerfile --build-arg BASE_IMAGE_TAG=6 --build-arg OS_TYPE=oraclelinux
+      - name: Build Oraclelinux 7
+        run: docker build --rm --no-cache -t litmusimage/oraclelinux:7 . -f yum_systemd_dockerfile --build-arg BASE_IMAGE_TAG=7 --build-arg OS_TYPE=oraclelinux
+      - name: Build Debian 8
+        run: docker build --rm --no-cache -t litmusimage/debian:8 . -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=8 --build-arg OS_TYPE=debian
+      - name: Build Debian 9
+        run: docker build --rm --no-cache -t litmusimage/debian:9 . -f apt_systemd_dockerfile --build-arg BASE_IMAGE_TAG=9 --build-arg OS_TYPE=debian
+      - name: Build Debian 10
+        run: docker build --rm --no-cache -t litmusimage/debian:10 . -f apt_sysvinit-utils_dockerfile --build-arg BASE_IMAGE_TAG=10 --build-arg OS_TYPE=debian
