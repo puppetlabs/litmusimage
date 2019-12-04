@@ -16,7 +16,7 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
-RUN yum -y install openssh-server openssh-clients initscripts; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
+RUN yum -y install openssh-server openssh-clients initscripts glibc-langpack-en; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
 
 EXPOSE 22
 
