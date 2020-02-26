@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         env:
+        - { IMAGE: 'ubuntu', TAG: '14.04', DOCKERFILE: 'apt_initd_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '14.04' }
         - { IMAGE: 'ubuntu', TAG: '16.04', DOCKERFILE: 'apt_systemd_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '16.04' }
         - { IMAGE: 'ubuntu', TAG: '18.04', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '18.04' }
         - { IMAGE: 'centos', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'centos', BASE_IMAGE_TAG: '6' }
