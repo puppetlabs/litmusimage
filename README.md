@@ -1,10 +1,12 @@
 # litmusimage
 
-This repository creates docker image files, for testing puppet modules with services with [Puppet Litmus][1].
+This repository creates docker image files, for testing puppet modules with
+services with [Puppet Litmus][1].
 
 The images have initd, systemd or upstart, along with SSH.
 
-Images get uploaded to [Docker Hub][2] automatically and are rebuilt [nightly if necessary][3].
+Images get uploaded to [Docker Hub][2] automatically and are rebuilt [nightly if
+necessary][3].
 
 # Buildable images
 
@@ -30,7 +32,8 @@ Images get uploaded to [Docker Hub][2] automatically and are rebuilt [nightly if
 docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
 ```
 
-For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`, `IMAGE=ubuntu` and `TAG=14.04`:
+For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`,
+`IMAGE=ubuntu` and `TAG=14.04`:
 
 ```
 docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
@@ -69,14 +72,20 @@ docker rmi $(docker images -q)
 # Add new images
 
 * Add/change dockerfile for the new image
-* Every dockerfile needs a `base_image` label where the base image id will be stored. This will be used in the nightly build to identify if the base image has been updated.
+* Every dockerfile needs a `base_image` label where the base image id will be
+  stored. This will be used in the nightly build to identify if the base image
+  has been updated.
 * Change [workflows][4] to build the new images
-* New images will be pushed to dockerhub only on pushes to the master branch, and will be updated nightly in case the base image has changed
+* New images will be pushed to dockerhub only on pushes to the master branch,
+  and will be updated nightly in case the base image has changed
 
 ## Future improvements
 
-* Use a centralized file (possibly CSV, JSON or YAML) with the images and corresponding `docker build` parameters rather than having it duplicated in every workflow.
-* Optimize building by using fewer layers or using multi-stage builds (needs to take care of correctly basing on base image)
+* Use a centralized file (possibly CSV, JSON or YAML) with the images and
+  corresponding `docker build` parameters rather than having it duplicated in
+  every workflow.
+* Optimize building by using fewer layers or using multi-stage builds (needs to
+  take care of correctly basing on base image)
 * Introduce variants with puppet agent pre-installed for `litmus:install_agent`
 
 [1]: https://github.com/puppetlabs/puppet_litmus/wiki
