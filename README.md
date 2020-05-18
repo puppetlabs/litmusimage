@@ -15,6 +15,7 @@ necessary][3].
 | ubuntu | 14.04 | apt_initd_dockerfile | ubuntu | 14.04 |
 | ubuntu | 16.04 | apt_systemd_dockerfile | ubuntu | 16.04 |
 | ubuntu | 18.04 | apt_sysvinit-utils_dockerfile | ubuntu | 18.04 |
+| ubuntu | 20.04 | apt_sysvinit-utils_dockerfile | ubuntu | 20.04 |
 | centos | 6 | yum_initd_dockerfile | centos | 6 |
 | centos | 7 | yum_systemd_dockerfile | centos | 7 |
 | centos | 8 | yum_systemd_dockerfile | centos | 8 |
