@@ -8,7 +8,7 @@ The images have initd, systemd or upstart, along with SSH.
 Images get uploaded to [Docker Hub][2] automatically and are rebuilt [nightly if
 necessary][3].
 
-# Buildable images
+## Buildable images
 
 | IMAGE | TAG | DOCKERFILE | BASE_IMAGE | BASE_IMAGE_TAG |
 | ------| ----| -----------| -----------| ---------------|
@@ -26,7 +26,7 @@ necessary][3].
 | debian | 9 | apt_systemd_dockerfile | debian | 9 |
 | debian | 10 | apt_sysvinit-utils_dockerfile | debian | 10 |
 
-# Manual Building
+## Manual Building
 
 ```
 docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
@@ -39,14 +39,14 @@ For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`,
 docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
 ```
 
-# Push said image
+## Push said image
 
 ```
 # docker login
 docker image push litmusimage/centos:7
 ```
 
-# Tips and tricks for docker wrangling
+## Tips and tricks for docker wrangling
 
 ```
 # List running and stopped containers
@@ -69,7 +69,7 @@ docker image history litmusimage/ubuntu16.04
 docker rmi $(docker images -q)
 ```
 
-# Add new images
+## Add new images
 
 * Add/change dockerfile for the new image
 * Every dockerfile needs a `base_image` label where the base image id will be
