@@ -1,4 +1,5 @@
 # litmusimage
+
 This repository creates docker image files, for testing puppet modules with services with [Puppet Litmus](https://github.com/puppetlabs/puppet_litmus/wiki).
 
 The images have initd, systemd or upstart, along with SSH.
@@ -6,6 +7,7 @@ The images have initd, systemd or upstart, along with SSH.
 Images get uploaded to [Docker Hub](https://hub.docker.com/u/litmusimage) automatically and are rebuilt [nightly if necessary](https://github.com/puppetlabs/litmus_image/blob/master/.github/workflows/nightly.yml).
 
 # Buildable images
+
 | IMAGE | TAG | DOCKERFILE | BASE_IMAGE | BASE_IMAGE_TAG |
 | ------| ----| -----------| -----------| ---------------|
 | ubuntu | 14.04 | apt_initd_dockerfile | ubuntu | 14.04 |
