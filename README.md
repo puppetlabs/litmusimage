@@ -31,6 +31,7 @@ docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build
 ```
 
 For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`, `IMAGE=ubuntu` and `TAG=14.04`:
+
 ```
 docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
 ```
@@ -41,6 +42,7 @@ docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfi
 # docker login
 docker image push litmusimage/centos:7
 ```
+
 # Tips and tricks for docker wrangling
 
 ```
