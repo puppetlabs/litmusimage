@@ -3,7 +3,7 @@ name: Update images
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   build:

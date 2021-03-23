@@ -77,7 +77,7 @@ docker rmi $(docker images -q)
   stored. This will be used in the nightly build to identify if the base image
   has been updated.
 * Change [workflows][4] to build the new images
-* New images will be pushed to dockerhub only on pushes to the master branch,
+* New images will be pushed to dockerhub only on pushes to the main branch,
   and will be updated nightly in case the base image has changed
 
 ## Future improvements
@@ -91,5 +91,5 @@ docker rmi $(docker images -q)
 
 [1]: https://github.com/puppetlabs/puppet_litmus/wiki
 [2]: https://hub.docker.com/u/litmusimage
-[3]: https://github.com/puppetlabs/litmus_image/blob/master/.github/workflows/nightly.yml
-[4]: https://github.com/puppetlabs/litmus_image/tree/master/.github/workflows
+[3]: https://github.com/puppetlabs/litmus_image/blob/main/.github/workflows/nightly.yml
+[4]: https://github.com/puppetlabs/litmus_image/tree/main/.github/workflows
