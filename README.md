@@ -33,8 +33,7 @@ necessary][3].
 docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
 ```
 
-For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`,
-`IMAGE=ubuntu` and `TAG=14.04`:
+For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`, `IMAGE=ubuntu`, `TAG=14.04`, and `BASE_IMAGE_TAG=${TAG}`
 
 ```
 docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
