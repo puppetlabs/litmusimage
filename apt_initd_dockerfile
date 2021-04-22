@@ -5,7 +5,7 @@ FROM $OS_TYPE:$BASE_IMAGE_TAG
 MAINTAINER "TP Honey" tp@puppet.com
 
 RUN apt-get update \
-    && apt-get install -y wget locales apt-transport-https
+    && apt-get install -y wget locales apt-transport-https curl
 
 RUN rm /usr/sbin/policy-rc.d \
     && rm /sbin/initctl \
