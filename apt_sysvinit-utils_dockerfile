@@ -2,7 +2,6 @@ ARG BASE_IMAGE_TAG
 ARG OS_TYPE
 
 FROM $OS_TYPE:$BASE_IMAGE_TAG
-MAINTAINER "TP Honey" tp@puppet.com
 
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
