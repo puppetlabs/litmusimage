@@ -2,7 +2,6 @@ ARG BASE_IMAGE_TAG
 ARG OS_TYPE
 
 FROM $OS_TYPE:$BASE_IMAGE_TAG
-MAINTAINER "TP Honey" tp@puppet.com
 
 RUN apt-get update \
     && apt-get install -y wget locales apt-transport-https
