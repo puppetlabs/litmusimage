@@ -25,6 +25,7 @@ jobs:
         - { IMAGE: 'debian', TAG: '8', DOCKERFILE: 'apt_systemd_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '8' }
         - { IMAGE: 'debian', TAG: '9', DOCKERFILE: 'apt_systemd_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '9' }
         - { IMAGE: 'debian', TAG: '10', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '10' }
+        - { IMAGE: 'debian', TAG: '11', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: 'bullseye' }
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v1
