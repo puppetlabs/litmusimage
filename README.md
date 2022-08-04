@@ -18,7 +18,8 @@ necessary][3].
 | ubuntu | 20.04 | apt_sysvinit-utils_dockerfile | ubuntu | 20.04 |
 | centos | 6 | yum_initd_dockerfile | centos | 6 |
 | centos | 7 | yum_systemd_dockerfile | centos | 7 |
-| centos | 8 | yum_systemd_dockerfile | centos | 8 |
+| centos | stream8 | yum_systemd_dockerfile | centos | stream8 |
+| centos | stream9 | yum_systemd_dockerfile | centos | stream9 |
 | scientificlinux | 6 | yum_initd_dockerfile | scientificlinux/sl | 6 |
 | scientificlinux | 7 | yum_systemd_dockerfile | scientificlinux/sl | 7 |
 | oraclelinux | 6 | yum_initd_dockerfile | oraclelinux | 6 |

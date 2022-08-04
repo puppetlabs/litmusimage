@@ -17,6 +17,7 @@ jobs:
         - { IMAGE: 'centos', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'centos', BASE_IMAGE_TAG: '6' }
         - { IMAGE: 'centos', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'centos', BASE_IMAGE_TAG: '7' }
         - { IMAGE: 'centos', TAG: 'stream8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'quay.io/centos/centos', BASE_IMAGE_TAG: 'stream8' }
+        - { IMAGE: 'centos', TAG: 'stream9', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'quay.io/centos/centos', BASE_IMAGE_TAG: 'stream9' }
         - { IMAGE: 'scientificlinux', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'scientificlinux/sl', BASE_IMAGE_TAG: '6' }
         - { IMAGE: 'scientificlinux', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'scientificlinux/sl', BASE_IMAGE_TAG: '7' }
         - { IMAGE: 'oraclelinux', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '6' }
