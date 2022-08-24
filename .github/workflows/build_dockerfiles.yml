@@ -7,6 +7,7 @@ jobs:
     name: Build
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         env:
         - { IMAGE: 'ubuntu', TAG: '14.04', DOCKERFILE: 'apt_initd_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '14.04' }
