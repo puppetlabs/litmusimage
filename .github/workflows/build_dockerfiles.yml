@@ -21,6 +21,8 @@ jobs:
           - { IMAGE: 'scientificlinux', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'scientificlinux/sl', BASE_IMAGE_TAG: '7' }
           - { IMAGE: 'oraclelinux', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '6' }
           - { IMAGE: 'oraclelinux', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '7' }
+          - { IMAGE: 'oraclelinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '8' }
+          - { IMAGE: 'oraclelinux', TAG: '9', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '9' }
           - { IMAGE: 'rockylinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'rockylinux/rockylinux', BASE_IMAGE_TAG: '8' }
           - { IMAGE: 'almalinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'almalinux', BASE_IMAGE_TAG: '8' }
           - { IMAGE: 'debian', TAG: '10', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '10' }
