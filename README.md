@@ -29,6 +29,8 @@ necessary][3].
 | almalinux | 8 | yum_systemd_dockerfile | almalinux | 8 |
 | debian | 10 | apt_sysvinit-utils_dockerfile | debian | 10 |
 | debian | 11 | apt_sysvinit-utils_dockerfile | debian | bullseye |
+| amazonlinux | 2 | yum_systemd_dockerfile | amazonlinux | 2 |
+| fedora | 36 | yum_systemd_dockerfile | fedora | 36 |
 
 ## Manual Building
 
