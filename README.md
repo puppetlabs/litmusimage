@@ -12,10 +12,9 @@ necessary][3].
 
 | IMAGE | TAG | DOCKERFILE | BASE_IMAGE | BASE_IMAGE_TAG |
 | ------| ----| -----------| -----------| ---------------|
-| ubuntu | 14.04 | apt_initd_dockerfile | ubuntu | 14.04 |
-| ubuntu | 16.04 | apt_systemd_dockerfile | ubuntu | 16.04 |
 | ubuntu | 18.04 | apt_sysvinit-utils_dockerfile | ubuntu | 18.04 |
 | ubuntu | 20.04 | apt_sysvinit-utils_dockerfile | ubuntu | 20.04 |
+| ubuntu | 22.04 | apt_sysvinit-utils_dockerfile | ubuntu | 22.04 |
 | centos | 6 | yum_initd_dockerfile | centos | 6 |
 | centos | 7 | yum_systemd_dockerfile | centos | 7 |
 | centos | stream8 | yum_systemd_dockerfile | centos | stream8 |
@@ -24,32 +23,34 @@ necessary][3].
 | scientificlinux | 7 | yum_systemd_dockerfile | scientificlinux/sl | 7 |
 | oraclelinux | 6 | yum_initd_dockerfile | oraclelinux | 6 |
 | oraclelinux | 7 | yum_systemd_dockerfile | oraclelinux | 7 |
-| debian | 8 | apt_systemd_dockerfile | debian | 8 |
-| debian | 9 | apt_systemd_dockerfile | debian | 9 |
+| oraclelinux | 7 | yum_systemd_dockerfile | oraclelinux | 7 |
+| rockylinux | 8 | yum_systemd_dockerfile | rockylinux/rockylinux | 8 |
+| almalinux | 8 | yum_systemd_dockerfile | almalinux | 8 |
 | debian | 10 | apt_sysvinit-utils_dockerfile | debian | 10 |
+| debian | 11 | apt_sysvinit-utils_dockerfile | debian | bullseye |
 
 ## Manual Building
 
-```
+```bash
 docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
 ```
 
 For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`, `IMAGE=ubuntu`, `TAG=14.04`, and `BASE_IMAGE_TAG=${TAG}`
 
-```
+```bash
 docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
 ```
 
 ## Push said image
 
-```
+```bash
 # docker login
 docker image push litmusimage/centos:7
 ```
 
 ## Tips and tricks for docker wrangling
 
-```
+```bash
 # List running and stopped containers
 docker container ls -a
 # remove a container
@@ -89,7 +90,7 @@ docker rmi $(docker images -q)
   take care of correctly basing on base image)
 * Introduce variants with puppet agent pre-installed for `litmus:install_agent`
 
-[1]: https://github.com/puppetlabs/puppet_litmus/wiki
+[1]: https://github.com/puppetlabs/puppet_litmus
 [2]: https://hub.docker.com/u/litmusimage
 [3]: https://github.com/puppetlabs/litmus_image/blob/main/.github/workflows/nightly.yml
 [4]: https://github.com/puppetlabs/litmus_image/tree/main/.github/workflows
