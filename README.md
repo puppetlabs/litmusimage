@@ -23,7 +23,6 @@ necessary][3].
 | scientificlinux | 7 | yum_systemd_dockerfile | scientificlinux/sl | 7 |
 | oraclelinux | 6 | yum_initd_dockerfile | oraclelinux | 6 |
 | oraclelinux | 7 | yum_systemd_dockerfile | oraclelinux | 7 |
-| oraclelinux | 7 | yum_systemd_dockerfile | oraclelinux | 7 |
 | oraclelinux | 8 | yum_systemd_dockerfile | oraclelinux | 8 |
 | oraclelinux | 9 | yum_systemd_dockerfile | oraclelinux | 9 |
 | rockylinux | 8 | yum_systemd_dockerfile | rockylinux/rockylinux | 8 |
