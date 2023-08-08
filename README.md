@@ -29,6 +29,8 @@ necessary][3].
 | almalinux | 8 | yum_systemd_dockerfile | almalinux | 8 |
 | debian | 10 | apt_sysvinit-utils_dockerfile | debian | 10 |
 | debian | 11 | apt_sysvinit-utils_dockerfile | debian | bullseye |
+| amazonlinux | 2 | yum_systemd_dockerfile | amazonlinux | 2 |
+| fedora | 36 | yum_systemd_dockerfile | fedora | 36 |
 
 ## Manual Building
 
@@ -36,17 +38,17 @@ necessary][3].
 docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
 ```
 
-For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_initd_dockerfile`, `IMAGE=ubuntu`, `TAG=14.04`, and `BASE_IMAGE_TAG=${TAG}`
+For example with `BASE_IMAGE=ubuntu`, `DOCKERFILE=apt_sysvinit-utils_dockerfile`, `IMAGE=ubuntu`, `TAG=22.04`, and `BASE_IMAGE_TAG=${TAG}`
 
 ```bash
-docker build --rm --no-cache -t litmusimage/ubuntu:14.04 . -f apt_initd_dockerfile --build-arg BASE_IMAGE_TAG=14.04 --build-arg OS_TYPE=ubuntu
+docker build --rm --no-cache -t litmusimage/ubuntu:22.04 . -f apt_sysvinit-utils_dockerfile --build-arg BASE_IMAGE_TAG=22.04 --build-arg OS_TYPE=ubuntu
 ```
 
 ## Push said image
 
 ```bash
 # docker login
-docker image push litmusimage/centos:7
+docker image push litmusimage/centos:stream9
 ```
 
 ## Tips and tricks for docker wrangling
@@ -55,19 +57,19 @@ docker image push litmusimage/centos:7
 # List running and stopped containers
 docker container ls -a
 # remove a container
-docker rm -f ubuntu_14.04-2224
+docker rm -f ubuntu_20.04-2224
 # remove all containers
 docker rm -f $(docker ps -a -q)
 # jump into a container, force a shell
-docker exec -it litmusimage_debian9_-2223 /bin/bash
+docker exec -it litmusimage_debian11_-2223 /bin/bash
 # attach to a container ( limited by what pid 0 is)
-docker attach litmusimage_ubuntu16.04_-2222
+docker attach litmusimage_ubuntu22.04_-2222
 # safely exit a container, leaving it running
 <ctrl> + p then <ctrl> + q
 # get the latest version of the image
-docker pull debian:8
+docker pull debian:10
 # show the history of the image
-docker image history litmusimage/ubuntu16.04
+docker image history litmusimage/ubuntu22.04
 # remove all docker images that are on your local machine
 docker rmi $(docker images -q)
 ```
