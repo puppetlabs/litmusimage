@@ -27,6 +27,7 @@ jobs:
           - { IMAGE: 'almalinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'almalinux', BASE_IMAGE_TAG: '8' }
           - { IMAGE: 'debian', TAG: '10', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '10' }
           - { IMAGE: 'debian', TAG: '11', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: 'bullseye' }
+          - { IMAGE: 'debian', TAG: '12', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '12' }
           - { IMAGE: 'amazonlinux', TAG: '2', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'amazonlinux', BASE_IMAGE_TAG: '2' }
           - { IMAGE: 'fedora', TAG: '36', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'fedora', BASE_IMAGE_TAG: '36' }
 
