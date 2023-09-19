@@ -26,7 +26,9 @@ necessary][3].
 | oraclelinux | 8 | yum_systemd_dockerfile | oraclelinux | 8 |
 | oraclelinux | 9 | yum_systemd_dockerfile | oraclelinux | 9 |
 | rockylinux | 8 | yum_systemd_dockerfile | rockylinux/rockylinux | 8 |
+| rockylinux | 9 | yum_systemd_dockerfile | rockylinux/rockylinux | 9 |
 | almalinux | 8 | yum_systemd_dockerfile | almalinux | 8 |
+| almalinux | 9 | yum_systemd_dockerfile | almalinux | 9 |
 | debian | 10 | apt_sysvinit-utils_dockerfile | debian | 10 |
 | debian | 11 | apt_sysvinit-utils_dockerfile | debian | bullseye |
 | amazonlinux | 2 | yum_systemd_dockerfile | amazonlinux | 2 |
