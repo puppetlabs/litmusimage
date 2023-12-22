@@ -1,0 +1,75 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      re_image: ${{ steps.create-inputs.outputs.re_image }}
+      re_dockerfile: ${{ steps.create-inputs.outputs.re_dockerfile }}
+      do_build: ${{ steps.create-inputs.outputs.do_build }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          json: true
+          quotepath: false
+      - name: Create inputs
+        id: create-inputs
+        shell: python {0}
+        run: |
+          import json
+          import os
+          import re
+          import subprocess
+          
+          re_image = re_dockerfile = ''
+          changed_files = json.loads("${{ steps.changed-files.outputs.all_changed_files }}")
+          with open('images.json') as fd:
+            builds = json.load(fd)
+          
+          dockerfiles = list(map(lambda v: v.removesuffix('.dockerfile'), filter(lambda v: re.match('.*dockerfile$', v), changed_files)))
+          if len(dockerfiles) > 0:
+              re_dockerfile = '|'.join(dockerfiles)
+          
+          if 'images.json' in changed_files:
+              try:
+                  data = subprocess.run(['git', 'show', 'HEAD^:images.json'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+                  images = json.loads(data)
+                  with open('images.json', 'r') as fd:
+                      new_images = json.load(fd)
+                  diff = list(filter(lambda v: v not in images, new_images))
+                  if len(diff) > 0:
+                      re_image = '|'.join(map(lambda v: f"{v['image']}:{v['tag']}", diff))
+              except json.decoder.JSONDecodeError:
+                  re_image = '.*'
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+            if re_dockerfile == re_image:
+              print('do_build=false', file=output)
+              print('::notice title=::no image build changes detected')
+            else:
+              print('do_build=true', file=output)
+              print(f're_dockerfile=({re_dockerfile})', file=output)
+              print(f're_image=({re_image})', file=output)
+
+  build:
+    needs: prepare
+    if: needs.prepare.outputs.do_build == 'true'
+    uses: ./.github/workflows/template_build_deploy.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.prepare.outputs.re_image }}
+      dockerfile: ${{ needs.prepare.outputs.re_dockerfile }}
+      refresh: true

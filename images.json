@@ -1,0 +1,22 @@
+[
+    { "image": "ubuntu",          "tag": "18.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "18.04" },
+    { "image": "ubuntu",          "tag": "20.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "20.04" },
+    { "image": "ubuntu",          "tag": "22.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "22.04" },
+    { "image": "centos",          "tag": "6",       "dockerfile": "yum_initd",          "base_image": "centos",                "base_tag": "6" },
+    { "image": "centos",          "tag": "7",       "dockerfile": "yum_systemd",        "base_image": "centos",                "base_tag": "7" },
+    { "image": "centos",          "tag": "stream8", "dockerfile": "yum_systemd",        "base_image": "quay.io/centos/centos", "base_tag": "stream8" },
+    { "image": "centos",          "tag": "stream9", "dockerfile": "yum_systemd",        "base_image": "quay.io/centos/centos", "base_tag": "stream9" },
+    { "image": "scientificlinux", "tag": "6",       "dockerfile": "yum_initd",          "base_image": "scientificlinux/sl",    "base_tag": "6" },
+    { "image": "scientificlinux", "tag": "7",       "dockerfile": "yum_systemd",        "base_image": "scientificlinux/sl",    "base_tag": "7" },
+    { "image": "oraclelinux",     "tag": "6",       "dockerfile": "yum_initd",          "base_image": "oraclelinux",           "base_tag": "6" },
+    { "image": "oraclelinux",     "tag": "7",       "dockerfile": "yum_systemd",        "base_image": "oraclelinux",           "base_tag": "7" },
+    { "image": "oraclelinux",     "tag": "8",       "dockerfile": "yum_systemd",        "base_image": "oraclelinux",           "base_tag": "8" },
+    { "image": "oraclelinux",     "tag": "9",       "dockerfile": "yum_systemd",        "base_image": "oraclelinux",           "base_tag": "9" },
+    { "image": "rockylinux",      "tag": "8",       "dockerfile": "yum_systemd",        "base_image": "rockylinux/rockylinux", "base_tag": "8" },
+    { "image": "almalinux",       "tag": "8",       "dockerfile": "yum_systemd",        "base_image": "almalinux",             "base_tag": "8" },
+    { "image": "debian",          "tag": "10",      "dockerfile": "apt_sysvinit-utils", "base_image": "debian",                "base_tag": "10" },
+    { "image": "debian",          "tag": "11",      "dockerfile": "apt_sysvinit-utils", "base_image": "debian",                "base_tag": "bullseye" },
+    { "image": "debian",          "tag": "12",      "dockerfile": "apt_sysvinit-utils", "base_image": "debian",                "base_tag": "12" },
+    { "image": "amazonlinux",     "tag": "2",       "dockerfile": "yum_systemd",        "base_image": "amazonlinux",           "base_tag": "2" },
+    { "image": "fedora",          "tag": "36",      "dockerfile": "yum_systemd",        "base_image": "fedora",                "base_tag": "36" }
+]

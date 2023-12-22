@@ -1,0 +1,38 @@
+---
+name: Manual
+run-name: >
+  Build
+  ${{ inputs.image && format('image={0}', inputs.image) || '' }}
+  ${{ inputs.dockerfile && format('dockerfile={0}', inputs.dockerfile) || '' }}
+  ${{ inputs.refresh && format('refresh={0}', inputs.refresh) || '' }}
+  ${{ inputs.push && format('push={0}', inputs.push) || ''}}
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: image:tag (regex)
+        type: string
+        default: ".*"
+      dockerfile:
+        description: or dockerfile (regex)
+        type: string
+        default: ""
+      refresh:
+        description: build even if base image unchanged
+        type: boolean
+        default: false
+      push:
+        description: push to registry (default branch only)
+        type: boolean
+        default: true
+
+jobs:
+  manual:
+    uses: ./.github/workflows/template_build_deploy.yml
+    secrets: inherit
+    with:
+      image: ${{ inputs.image }}
+      dockerfile: ${{ inputs.dockerfile }}
+      refresh: ${{ inputs.refresh == true }}
+      push: ${{ inputs.push == true }}
