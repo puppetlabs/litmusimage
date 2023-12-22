@@ -24,6 +24,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 | centos          | stream9 | yum_systemd        | quay.io/centos/centos | stream9 |
 | scientificlinux | 6       | yum_initd          | scientificlinux/sl    | 6 |
 | scientificlinux | 7       | yum_systemd        | scientificlinux/sl    | 7 |
+| sles            | 15      | zypper_systemd     | registry.suse.com/suse/sle15 | 15.5 |
 | oraclelinux     | 6       | yum_initd          | oraclelinux           | 6 |
 | oraclelinux     | 7       | yum_systemd        | oraclelinux           | 7 |
 | oraclelinux     | 8       | yum_systemd        | oraclelinux           | 8 |
