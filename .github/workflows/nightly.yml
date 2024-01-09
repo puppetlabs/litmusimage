@@ -1,4 +1,4 @@
-name: Nightly build
+name: Nightly
 
 on:
   schedule:
@@ -6,47 +6,7 @@ on:
 
 jobs:
   build:
-    name: build
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        env:
-          - { IMAGE: 'ubuntu', TAG: '18.04', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '18.04' }
-          - { IMAGE: 'ubuntu', TAG: '20.04', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '20.04' }
-          - { IMAGE: 'ubuntu', TAG: '22.04', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'ubuntu', BASE_IMAGE_TAG: '22.04' }
-          - { IMAGE: 'centos', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'centos', BASE_IMAGE_TAG: '6' }
-          - { IMAGE: 'centos', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'centos', BASE_IMAGE_TAG: '7' }
-          - { IMAGE: 'centos', TAG: 'stream8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'quay.io/centos/centos', BASE_IMAGE_TAG: 'stream8' }
-          - { IMAGE: 'centos', TAG: 'stream9', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'quay.io/centos/centos', BASE_IMAGE_TAG: 'stream9' }
-          - { IMAGE: 'scientificlinux', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'scientificlinux/sl', BASE_IMAGE_TAG: '6' }
-          - { IMAGE: 'scientificlinux', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'scientificlinux/sl', BASE_IMAGE_TAG: '7' }
-          - { IMAGE: 'oraclelinux', TAG: '6', DOCKERFILE: 'yum_initd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '6' }
-          - { IMAGE: 'oraclelinux', TAG: '7', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '7' }
-          - { IMAGE: 'oraclelinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '8' }
-          - { IMAGE: 'oraclelinux', TAG: '9', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'oraclelinux', BASE_IMAGE_TAG: '9' }
-          - { IMAGE: 'rockylinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'rockylinux/rockylinux', BASE_IMAGE_TAG: '8' }
-          - { IMAGE: 'almalinux', TAG: '8', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'almalinux', BASE_IMAGE_TAG: '8' }
-          - { IMAGE: 'debian', TAG: '10', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: '10' }
-          - { IMAGE: 'debian', TAG: '11', DOCKERFILE: 'apt_sysvinit-utils_dockerfile', BASE_IMAGE: 'debian', BASE_IMAGE_TAG: 'bullseye' }
-          - { IMAGE: 'amazonlinux', TAG: '2', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'amazonlinux', BASE_IMAGE_TAG: '2' }
-          - { IMAGE: 'fedora', TAG: '36', DOCKERFILE: 'yum_systemd_dockerfile', BASE_IMAGE: 'fedora', BASE_IMAGE_TAG: '36' }
-   
-    env: ${{ matrix.env }}
-    steps:
-      - name: Docker login
-        env:
-          DOCKER_CRED: '${{ secrets.DockerPassword }}'
-        run: docker login -u waffleimage -p "${DOCKER_CRED}"
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-      - run: |
-          docker pull $BASE_IMAGE:$BASE_IMAGE_TAG
-          docker pull litmusimage/$IMAGE:$TAG
-          base_id=`docker images -q $BASE_IMAGE:$BASE_IMAGE_TAG`
-          id=`docker inspect litmusimage/$IMAGE:$TAG --format "{{ index .Config.Labels \"base_image\"}}"`
-          if [ "$base_id" != "$id" ]; then
-            docker build --rm --no-cache -t litmusimage/$IMAGE:$TAG . --label "base_image=${base_id}" -f $DOCKERFILE --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG --build-arg OS_TYPE=$BASE_IMAGE
-            docker push litmusimage/$IMAGE:$TAG
-          fi
+    uses: ./.github/workflows/template_build_deploy.yml
+    with:
+      image: .*
+    secrets: inherit
