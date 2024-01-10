@@ -139,15 +139,16 @@ Action [secrets][6] and [variables][7]:
 | `DOCKER_REPOSITORY` |        |
 
 [1]: https://github.com/puppetlabs/puppetlitmus
+[2]: ../../packages
 [2]: https://hub.docker.com/u/litmusimage
-[3]: https://github.com/puppetlabs/litmusimage/blob/main/.github/workflows/nightly.yml
-[4]: https://github.com/puppetlabs/litmusimage/tree/main/images.json
+[3]: .github/workflows/nightly.yml
+[4]: images.json
 [5]: https://ghcr.io
 [6]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions
 [7]: https://docs.github.com/en/actions/learn-github-actions/variables
 
-[nightly-badge]: https://github.com/puppetlabs/litmusimage/actions/workflows/nightly.yml/badge.svg
-[nightly-workflow]: https://github.com/puppetlabs/litmusimage/actions/workflows/nightly.yml
-[ci-badge]: https://github.com/puppetlabs/litmusimage/actions/workflows/ci.yml/badge.svg
-[ci-workflow]: https://github.com/puppetlabs/litmusimage/actions/workflows/ci.yml
+[nightly-badge]: ../../actions/workflows/nightly.yml/badge.svg
+[nightly-workflow]: ../../actions/workflows/nightly.yml
+[ci-badge]: ../../actions/workflows/ci.yml/badge.svg
+[ci-workflow]: ../../actions/workflows/ci.yml
 [license-badge]: https://img.shields.io/badge/License-Apache_2.0-blue.svg
