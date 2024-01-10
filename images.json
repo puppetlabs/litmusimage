@@ -2,6 +2,7 @@
     { "image": "ubuntu",          "tag": "18.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "18.04" },
     { "image": "ubuntu",          "tag": "20.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "20.04" },
     { "image": "ubuntu",          "tag": "22.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "22.04" },
+    { "image": "ubuntu",          "tag": "24.04",   "dockerfile": "apt_sysvinit-utils", "base_image": "ubuntu",                "base_tag": "24.04" },
     { "image": "centos",          "tag": "6",       "dockerfile": "yum_initd",          "base_image": "centos",                "base_tag": "6" },
     { "image": "centos",          "tag": "7",       "dockerfile": "yum_systemd",        "base_image": "centos",                "base_tag": "7" },
     { "image": "centos",          "tag": "stream8", "dockerfile": "yum_systemd",        "base_image": "quay.io/centos/centos", "base_tag": "stream8" },
