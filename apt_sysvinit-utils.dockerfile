@@ -7,7 +7,7 @@ ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-    && apt-get install -y systemd util-linux locales locales-all sysvinit-utils wget iproute2 apt-transport-https\
+    && apt-get install -y systemd sysvinit-utils util-linux locales locales-all wget iproute2 apt-transport-https\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
