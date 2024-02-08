@@ -13,32 +13,35 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 
 ## Buildable images
 
-| image           | tag     | dockerfile         | base_image            | base_tag |
-| -----           | ---     | ----------         | ----------            | -------- |
-| ubuntu          | 18.04   | apt_sysvinit-utils | ubuntu                | 18.04 |
-| ubuntu          | 20.04   | apt_sysvinit-utils | ubuntu                | 20.04 |
-| ubuntu          | 22.04   | apt_sysvinit-utils | ubuntu                | 22.04 |
-| centos          | 6       | yum_initd          | centos                | 6 |
-| centos          | 7       | yum_systemd        | centos                | 7 |
-| centos          | stream8 | yum_systemd        | quay.io/centos/centos | stream8 |
-| centos          | stream9 | yum_systemd        | quay.io/centos/centos | stream9 |
-| scientificlinux | 6       | yum_initd          | scientificlinux/sl    | 6 |
-| scientificlinux | 7       | yum_systemd        | scientificlinux/sl    | 7 |
-| sles            | 15      | zypper_systemd     | registry.suse.com/suse/sle15 | 15.5 |
-| oraclelinux     | 6       | yum_initd          | oraclelinux           | 6 |
-| oraclelinux     | 7       | yum_systemd        | oraclelinux           | 7 |
-| oraclelinux     | 8       | yum_systemd        | oraclelinux           | 8 |
-| oraclelinux     | 9       | yum_systemd        | oraclelinux           | 9 |
-| rockylinux      | 8       | yum_systemd        | rockylinux/rockylinux | 8 |
-| rockylinux      | 9       | yum_systemd        | rockylinux/rockylinux | 9 |
-| almalinux       | 8       | yum_systemd        | almalinux             | 8 |
-| almalinux       | 9       | yum_systemd        | almalinux             | 9 |
-| debian          | 10      | apt_sysvinit-utils | debian                | 10 |
-| debian          | 11      | apt_sysvinit-utils | debian                | bullseye |
-| debian          | 12      | apt_sysvinit-utils | debian                | 12 |
-| amazonlinux     | 2       | yum_systemd        | amazonlinux           | 2 |
-| amazonlinux     | 2023    | yum_systemd        | amazonlinux           | 2023 |
-| fedora          | 36      | yum_systemd        | fedora                | 36 |
+| image           | tag     | dockerfile         | base_image                               | base_tag |
+|-----------------|---------|--------------------|------------------------------------------|----------|
+| ubuntu          | 18.04   | apt_sysvinit-utils | ubuntu                                   | 18.04    |
+| ubuntu          | 20.04   | apt_sysvinit-utils | ubuntu                                   | 20.04    |
+| ubuntu          | 22.04   | apt_sysvinit-utils | ubuntu                                   | 22.04    |
+| centos          | 6       | yum_initd          | centos                                   | 6        |
+| centos          | 7       | yum_systemd        | centos                                   | 7        |
+| centos          | stream8 | yum_systemd        | quay.io/centos/centos                    | stream8  |
+| centos          | stream9 | yum_systemd        | quay.io/centos/centos                    | stream9  |
+| scientificlinux | 6       | yum_initd          | scientificlinux/sl                       | 6        |
+| scientificlinux | 7       | yum_systemd        | scientificlinux/sl                       | 7        |
+| sles            | 15      | zypper_systemd     | registry.suse.com/suse/sle15             | 15.5     |
+| oraclelinux     | 6       | yum_initd          | oraclelinux                              | 6        |
+| oraclelinux     | 7       | yum_systemd        | oraclelinux                              | 7        |
+| oraclelinux     | 8       | yum_systemd        | oraclelinux                              | 8        |
+| oraclelinux     | 9       | yum_systemd        | oraclelinux                              | 9        |
+| rockylinux      | 8       | yum_systemd        | rockylinux/rockylinux                    | 8        |
+| rockylinux      | 9       | yum_systemd        | rockylinux/rockylinux                    | 9        |
+| almalinux       | 8       | yum_systemd        | almalinux                                | 8        |
+| almalinux       | 9       | yum_systemd        | almalinux                                | 9        |
+| redhat          | 7       | yum_systemd        | registry.access.redhat.com/ubi7/ubi-init | latest   |
+| redhat          | 8       | yum_systemd        | redhat/ubi8-init                         | latest   |
+| redhat          | 9       | yum_systemd        | redhat/ubi9-init                         | latest   |
+| debian          | 10      | apt_sysvinit-utils | debian                                   | 10       |
+| debian          | 11      | apt_sysvinit-utils | debian                                   | bullseye |
+| debian          | 12      | apt_sysvinit-utils | debian                                   | 12       |
+| amazonlinux     | 2       | yum_systemd        | amazonlinux                              | 2        |
+| amazonlinux     | 2023    | yum_systemd        | amazonlinux                              | 2023     |
+| fedora          | 36      | yum_systemd        | fedora                                   | 36       |
 
 ## Manual Building
 
