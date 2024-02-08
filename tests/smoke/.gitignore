@@ -1,0 +1,8 @@
+/.bundle
+/.resource_types
+/.*.json
+/*.log
+/spec
+/Gemfile.lock
+/.modules
+/Puppetfile

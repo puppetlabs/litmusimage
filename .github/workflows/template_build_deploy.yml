@@ -1,5 +1,5 @@
 ---
-name: template - build and deploy
+name: template - build, test and deploy
 
 on:
   workflow_call:
@@ -16,6 +16,9 @@ on:
       push:
         type: boolean
         default: true
+      puppet_litmus:
+        default: ""
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,6 +29,8 @@ env:
   REGISTRY_USERNAME: ${{ vars.DOCKER_USERNAME != '' && vars.DOCKER_USERNAME || github.actor }}
   REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD != '' && secrets.DOCKER_PASSWORD || secrets.GITHUB_TOKEN }}
   REPOSITORY: ${{ vars.DOCKER_REPOSITORY != '' && vars.DOCKER_REPOSITORY || github.repository }}
+  BOLT_GEM: 1
+  GEM_PUPPET_LITMUS: ${{ github.event.inputs.puppet_litmus }}
 
 jobs:
   select:
@@ -35,6 +40,26 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       push: ${{ steps.branch-names.outputs.is_default }}
     steps:
+      - name: Validate inputs
+        shell: ruby {0}
+        run: |
+          require 'json'
+          def valid_json?(data)
+            !!(JSON.parse(data) || true) rescue false
+          end
+          event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
+          event['inputs'].select! do |key, val|
+            next if val.nil? || val.empty?
+            case key
+            when "puppet_litmus"
+              !valid_json?(val) || val.match?(%r{[();]})
+            end
+          end
+          event['inputs'].each do |key, value|
+            puts "::error title=#{key} invalid::#{value}"
+          end
+          exit 1 unless event['inputs'].empty?
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -100,7 +125,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       max-parallel: 10
       fail-fast: false
@@ -140,20 +165,59 @@ jobs:
           fi
           echo "need_refresh=true" >> $GITHUB_OUTPUT
 
-      - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
-        name: Checkout repository
+      - name: Checkout repository
         id: checkout_repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - if: steps.checkout_repo.conclusion == 'success'
+      - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
         name: Build ${{ matrix.image_tag }}
         id: build_image
         run: |
           docker build --rm --no-cache -t ${IMAGE_TAG} . --label "base_image=${BASE_ID}" -f ${{ matrix.dockerfile }}.dockerfile --build-arg BASE_IMAGE_TAG=${{ matrix.base_tag }} --build-arg OS_TYPE=${{ matrix.base_image }}
 
-      - if: steps.build_image.conclusion == 'success'  && needs.select.outputs.push == 'true'
+      - name: Smoke test setup
+        if: steps.build_image.outcome == 'success' || steps.build_image.conclusion == 'skipped'
+        id: test_ruby_setup
+        uses: "ruby/setup-ruby@v1"
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: tests/smoke
+
+      - name: Smoke test
+        if: steps.test_ruby_setup.outcome == 'success'
+        id: test_image
+        continue-on-error: true
+        working-directory: tests/smoke
+        timeout-minutes: 4
+        run: |
+          bundle info puppet_litmus
+          echo ::group::bolt module install
+          bundle exec bolt module install
+          echo ::endgroup::
+          echo ::group::rake listmus:provision
+          bundle exec rake litmus:provision[docker,${IMAGE_TAG}]
+          echo ::endgroup::
+          bundle exec bolt command run 'last' -t all
+
+        # Previous step should always continue on error
+        # so docker logs will be added to the output
+      - name: Smoke test cleanup
+        if: steps.test_image.conclusion == 'success'
+        working-directory: tests/smoke
+        run: |
+          set +e
+          echo ::group::Bolt inventory
+          bundle exec bolt inventory show --detail
+          echo ::endgroup::
+          docker ps -a --format '{{.ID}}' | xargs -n1 docker logs
+          bundle exec rake litmus:tear_down
+          # ALWAYS exit based on the outcode of the smoke test provision
+          exit ${{ steps.test_image.outcome != 'success' && '1' || '0' }}
+
+      - if: steps.build_image.outcome == 'success' && steps.test_image.outcome == 'success' && needs.select.outputs.push == 'true'
         name: Push ${{ matrix.image_tag }} to ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
         run: |
           docker image push $IMAGE_TAG
