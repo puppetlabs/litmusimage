@@ -1,0 +1,14 @@
+source 'https://rubygems.org'
+
+require 'json'
+
+if ENV.fetch('GEM_PUPPET_LITMUS', '').empty?
+  gem 'puppet_litmus'
+else
+  gem 'puppet_litmus', JSON.parse(ENV['GEM_PUPPET_LITMUS'])
+end
+
+gem 'puppetlabs_spec_helper'
+gem 'rake'
+gem 'ed25519'
+gem 'bcrypt_pbkdf'

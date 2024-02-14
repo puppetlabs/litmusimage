@@ -1,0 +1,7 @@
+---
+name: litmusimage
+analytics: false
+modules:
+  - name: puppetlabs/provision
+    git: https://github.com/h0tw1r3/provision.git
+    ref: h0tw1r3
