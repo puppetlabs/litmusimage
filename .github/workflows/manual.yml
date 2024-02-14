@@ -7,6 +7,7 @@ run-name: >
   ${{ inputs.refresh && format('refresh={0}', inputs.refresh) || '' }}
   ${{ inputs.push && format('push={0}', inputs.push) || ''}}
   ${{ inputs.puppet_litmus && format('puppet_litmus={0}', inputs.puppet_litmus) || '' }}
+  ${{ inputs.provision_module && format('provision_module={0}', inputs.provision_module) || '' }}
 
 on:
   workflow_dispatch:
@@ -31,6 +32,10 @@ on:
         description: gem options (JSON Hash)
         type: string
         default: ""
+      provision_module:
+        description: provision module overrides (JSON Hash)
+        type: string
+        default: ""
 
 jobs:
   manual:
@@ -42,3 +47,4 @@ jobs:
       refresh: ${{ inputs.refresh == true }}
       push: ${{ inputs.push == true }}
       puppet_litmus: ${{ inputs.puppet_litmus }}
+      provision_module: ${{ inputs.provision_module }}
