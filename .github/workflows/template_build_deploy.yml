@@ -30,7 +30,7 @@ env:
   REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD != '' && secrets.DOCKER_PASSWORD || secrets.GITHUB_TOKEN }}
   REPOSITORY: ${{ vars.DOCKER_REPOSITORY != '' && vars.DOCKER_REPOSITORY || github.repository }}
   BOLT_GEM: 1
-  GEM_PUPPET_LITMUS: ${{ github.event.inputs.puppet_litmus }}
+  GEM_PUPPET_LITMUS: ${{ inputs.puppet_litmus }}
 
 jobs:
   select:
@@ -47,18 +47,18 @@ jobs:
           def valid_json?(data)
             !!(JSON.parse(data) || true) rescue false
           end
-          event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
-          event['inputs'].select! do |key, val|
-            next if val.nil? || val.empty?
+          inputs = JSON.parse('${{ toJSON(inputs) }}')
+          inputs.select! do |key, val|
+            next if val.nil? || val.to_s.empty?
             case key
-            when "puppet_litmus"
+            when 'puppet_litmus'
               !valid_json?(val) || val.match?(%r{[();]})
             end
           end
-          event['inputs'].each do |key, value|
+          inputs.each do |key, value|
             puts "::error title=#{key} invalid::#{value}"
           end
-          exit 1 unless event['inputs'].empty?
+          exit 1 unless inputs.empty?
 
       - name: Checkout repository
         uses: actions/checkout@v4
