@@ -19,6 +19,9 @@ on:
       puppet_litmus:
         default: ""
         type: string
+      provision_module:
+        default: ""
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -51,7 +54,7 @@ jobs:
           inputs.select! do |key, val|
             next if val.nil? || val.to_s.empty?
             case key
-            when 'puppet_litmus'
+            when %r{puppet_litmus|provision_module}
               !valid_json?(val) || val.match?(%r{[();]})
             end
           end
@@ -186,6 +189,23 @@ jobs:
           bundler-cache: true
           working-directory: tests/smoke
 
+      - name: Smoke test with custom provision module
+        if: steps.test_ruby_setup.outcome == 'success' && inputs.provision_module != ''
+        working-directory: tests/smoke
+        shell: ruby {0}
+        run: |
+          require 'yaml'
+          require 'json'
+          input = <<INPUT
+          ${{ inputs.provision_module }}
+          INPUT
+          override = JSON.parse(input)
+          project = YAML.safe_load_file('bolt-project.yaml')
+          project["modules"].each_with_index do |mod, i|
+            project["modules"][i].merge!(override) if mod["name"].eql?('puppetlabs/provision')
+          end
+          File.write('bolt-project.yaml', project.to_yaml)
+
       - name: Smoke test
         if: steps.test_ruby_setup.outcome == 'success'
         id: test_image
@@ -196,6 +216,7 @@ jobs:
           bundle info puppet_litmus
           echo ::group::bolt module install
           bundle exec bolt module install
+          bundle exec bolt module show
           echo ::endgroup::
           echo ::group::rake listmus:provision
           bundle exec rake litmus:provision[docker,${IMAGE_TAG}]
