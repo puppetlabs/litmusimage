@@ -18,6 +18,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 | ubuntu          | 18.04   | apt_sysvinit-utils | ubuntu                                   | 18.04    |
 | ubuntu          | 20.04   | apt_sysvinit-utils | ubuntu                                   | 20.04    |
 | ubuntu          | 22.04   | apt_sysvinit-utils | ubuntu                                   | 22.04    |
+| ubuntu          | 24.04   | apt_sysvinit-utils | ubuntu                                   | 24.04    |
 | centos          | 6       | yum_initd          | centos                                   | 6        |
 | centos          | 7       | yum_systemd        | centos                                   | 7        |
 | centos          | stream8 | yum_systemd        | quay.io/centos/centos                    | stream8  |
