@@ -18,10 +18,6 @@ rm -f /usr/lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /usr/lib/systemd/system/basic.target.wants/*;\
 rm -f /usr/lib/systemd/system/anaconda.target.wants/*;
 
-EXPOSE 22
-
-VOLUME /run /tmp
-
 STOPSIGNAL SIGRTMIN+3
 
 CMD /usr/lib/systemd/systemd
