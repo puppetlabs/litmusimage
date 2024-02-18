@@ -1,0 +1,9 @@
+{
+    "supports_noop": false,
+    "description": "Very simple smoke test",
+    "parameters": { },
+    "input_method": "environment",
+    "implementations": [
+        { "name": "smoke.sh", "requirements": [ "shell" ] }
+    ]
+}
