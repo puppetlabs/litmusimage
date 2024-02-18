@@ -14,6 +14,4 @@ RUN sed -i -e 's/mirrorlist=/#mirrorlist=/' /etc/yum.repos.d/CentOS-Base.repo /e
   && chkconfig sshd on \
   && echo "export RUNLEVEL=5" >> /etc/profile
 
-EXPOSE 22
-
 CMD /sbin/init
