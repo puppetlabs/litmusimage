@@ -16,12 +16,16 @@ on:
       push:
         type: boolean
         default: true
+      provision_task:
+        default: "docker"
+        type: string
       puppet_litmus:
         default: ""
         type: string
       provision_module:
         default: ""
         type: string
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -56,6 +60,8 @@ jobs:
             case key
             when %r{puppet_litmus|provision_module}
               !valid_json?(val) || val.match?(%r{[();]})
+            when 'provision_task'
+              !/^docker(_exp)?$/.match?(val)
             end
           end
           inputs.each do |key, value|
@@ -219,9 +225,12 @@ jobs:
           bundle exec bolt module show
           echo ::endgroup::
           echo ::group::rake listmus:provision
-          bundle exec rake litmus:provision[docker,${IMAGE_TAG}]
+          bundle exec rake litmus:provision[${{ inputs.provision_task }},${IMAGE_TAG}]
           echo ::endgroup::
+          echo "testing bolt command"
           bundle exec bolt command run 'last' -t all
+          echo "testing bolt task"
+          bundle exec bolt task run litmusimage::smoke -t all
 
         # Previous step should always continue on error
         # so docker logs will be added to the output

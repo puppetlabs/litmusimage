@@ -28,6 +28,10 @@ on:
         description: push to registry (default branch only)
         type: boolean
         default: true
+      provision_task:
+        description: provision task (docker or docker_exp)
+        type: string
+        default: "docker"
       puppet_litmus:
         description: gem options (JSON Hash)
         type: string
@@ -46,5 +50,6 @@ jobs:
       dockerfile: ${{ inputs.dockerfile }}
       refresh: ${{ inputs.refresh == true }}
       push: ${{ inputs.push == true }}
+      provision_task: ${{ inputs.provision_task }}
       puppet_litmus: ${{ inputs.puppet_litmus }}
       provision_module: ${{ inputs.provision_module }}
