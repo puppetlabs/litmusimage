@@ -8,6 +8,7 @@ run-name: >
   ${{ inputs.push && format('push={0}', inputs.push) || ''}}
   ${{ inputs.puppet_litmus && format('puppet_litmus={0}', inputs.puppet_litmus) || '' }}
   ${{ inputs.provision_module && format('provision_module={0}', inputs.provision_module) || '' }}
+  ${{ inputs.provision_task && format('provision_task={0}', inputs.provision_task) || '' }}
 
 on:
   workflow_dispatch:
@@ -29,9 +30,12 @@ on:
         type: boolean
         default: true
       provision_task:
-        description: provision task (docker or docker_exp)
-        type: string
-        default: "docker"
+        description: provision task
+        type: choice
+        default: docker
+        options:
+          - docker
+          - docker_exp
       puppet_litmus:
         description: gem options (JSON Hash)
         type: string
