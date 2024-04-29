@@ -25,7 +25,8 @@ on:
       provision_module:
         default: ""
         type: string
-
+      acceptance_test:
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -190,6 +191,15 @@ jobs:
         uses: ./.github/actions/smoke-test
         with:
           docker_image: ${{ env.IMAGE_TAG }}
+          provision_task: ${{ inputs.provision_task }}
+          provision_module: ${{ inputs.provision_module }}
+
+      - name: Acceptance test (${{ inputs.provision_task }})
+        if: inputs.acceptance_test != ''
+        uses: ./.github/actions/acceptance-test
+        with:
+          docker_image: ${{ env.IMAGE_TAG }}
+          repo: ${{ inputs.acceptance_test }}
           provision_task: ${{ inputs.provision_task }}
           provision_module: ${{ inputs.provision_module }}
 

@@ -17,7 +17,7 @@ inputs:
     type: string
   ruby_version:
     required: true
-    default: "3.2"
+    default: "2.7"
     type: string
 
 runs:

@@ -73,3 +73,4 @@ jobs:
       image: ${{ needs.prepare.outputs.re_image }}
       dockerfile: ${{ needs.prepare.outputs.re_dockerfile }}
       refresh: true
+      acceptance_test: ${{ github.event_name == 'pull_request' && 'puppetlabs/puppetlabs-stdlib' }}

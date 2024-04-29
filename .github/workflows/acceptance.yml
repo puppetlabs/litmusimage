@@ -1,0 +1,75 @@
+---
+name: Test Module
+run-name: >
+  ${{ inputs.image && format('image={0}', inputs.image) || '' }}
+  ${{ inputs.repo && format('repo={0}', inputs.repo) || '' }}
+  ${{ inputs.ref && format('ref={0}', inputs.ref) || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        required: true
+        description: Litmus image:tag
+        type: string
+        default: "debian:10"
+      repo:
+        description: repo of module to acceptance test
+        type: string
+        default: "puppetlabs/puppetlabs-stdlib"
+      ref:
+        description: module git ref (optional)
+        type: string
+      provision_task:
+        description: provision task
+        type: choice
+        default: docker
+        options:
+          - docker
+          - docker_exp
+      latest_modules:
+        description: patch module fixtures with latest Puppet Litmus required modules
+        type: boolean
+        default: true
+      provision_module:
+        description: provision module overrides (JSON Hash)
+        type: string
+      puppet_agent_module:
+        description: puppet_agent module overrides (JSON Hash)
+        type: string
+
+env:
+  REGISTRY: ${{ vars.DOCKER_REGISTRY != '' && vars.DOCKER_REGISTRY || 'ghcr.io' }}
+  REPOSITORY: ${{ vars.DOCKER_REPOSITORY != '' && vars.DOCKER_REPOSITORY || github.repository }}
+  BOLT_GEM: 1
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Vars
+        id: vars
+        run: |
+          if [[ "${{ inputs.latest_modules }}" != "false" ]] ; then
+            echo 'provision_module="https://github.com/puppetlabs/provision.git"' >> "${GITHUB_OUTPUT}"
+            echo 'puppet_agent_module="https://github.com/puppetlabs/puppetlabs-puppet_agent.git"' >> "${GITHUB_OUTPUT}"
+          fi
+          if [[ -n "${{ inputs.provision_module }}" ]] ; then
+            echo 'provision_module=${{ inputs.provision_module }}' >> "${GITHUB_OUTPUT}"
+          fi
+          if [[ -n "${{ inputs.puppet_agent_module }}" ]] ; then
+            echo 'puppet_agent_module=${{ inputs.puppet_agent_module }}' >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test
+        uses: ./.github/actions/acceptance-test
+        with:
+          docker_image: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/${{ inputs.image }}
+          repo: ${{ inputs.repo }}
+          ref: ${{ inputs.ref }}
+          provision_task: ${{ inputs.provision_task }}
+          provision_module: ${{ steps.vars.outputs.provision_module }}
+          puppet_agent_module: ${{ steps.vars.outputs.puppet_agent_module }}
