@@ -25,7 +25,8 @@ on:
       provision_module:
         default: ""
         type: string
-
+      acceptance_test:
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -130,7 +131,7 @@ jobs:
   images:
     needs: select
     name: image (${{ matrix.image_tag }})
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
       contents: read
       packages: write
@@ -186,68 +187,23 @@ jobs:
         run: |
           docker build --rm --no-cache -t ${IMAGE_TAG} . --label "base_image=${BASE_ID}" -f ${{ matrix.dockerfile }}.dockerfile --build-arg BASE_IMAGE_TAG=${{ matrix.base_tag }} --build-arg OS_TYPE=${{ matrix.base_image }}
 
-      - name: Smoke test setup
-        if: steps.build_image.outcome == 'success' || steps.build_image.conclusion == 'skipped'
-        id: test_ruby_setup
-        uses: "ruby/setup-ruby@v1"
+      - name: Smoke test (${{ inputs.provision_task }})
+        uses: ./.github/actions/smoke-test
         with:
-          ruby-version: '3.2'
-          bundler-cache: true
-          working-directory: tests/smoke
+          docker_image: ${{ env.IMAGE_TAG }}
+          provision_task: ${{ inputs.provision_task }}
+          provision_module: ${{ inputs.provision_module }}
 
-      - name: Smoke test with custom provision module
-        if: steps.test_ruby_setup.outcome == 'success' && inputs.provision_module != ''
-        working-directory: tests/smoke
-        shell: ruby {0}
-        run: |
-          require 'yaml'
-          require 'json'
-          input = <<INPUT
-          ${{ inputs.provision_module }}
-          INPUT
-          override = JSON.parse(input)
-          project = YAML.safe_load_file('bolt-project.yaml')
-          project["modules"].each_with_index do |mod, i|
-            project["modules"][i].merge!(override) if mod["name"].eql?('puppetlabs/provision')
-          end
-          File.write('bolt-project.yaml', project.to_yaml)
+      - name: Acceptance test (${{ inputs.provision_task }})
+        if: inputs.acceptance_test != ''
+        uses: ./.github/actions/acceptance-test
+        with:
+          docker_image: ${{ env.IMAGE_TAG }}
+          repo: ${{ inputs.acceptance_test }}
+          provision_task: ${{ inputs.provision_task }}
+          provision_module: ${{ inputs.provision_module }}
 
-      - name: Smoke test
-        if: steps.test_ruby_setup.outcome == 'success'
-        id: test_image
-        continue-on-error: true
-        working-directory: tests/smoke
-        timeout-minutes: 4
-        run: |
-          bundle info puppet_litmus
-          echo ::group::bolt module install
-          bundle exec bolt module install
-          bundle exec bolt module show
-          echo ::endgroup::
-          echo ::group::rake listmus:provision
-          bundle exec rake litmus:provision[${{ inputs.provision_task }},${IMAGE_TAG}]
-          echo ::endgroup::
-          echo "testing bolt command"
-          bundle exec bolt command run 'last' -t all
-          echo "testing bolt task"
-          bundle exec bolt task run litmusimage::smoke -t all
-
-        # Previous step should always continue on error
-        # so docker logs will be added to the output
-      - name: Smoke test cleanup
-        if: steps.test_image.conclusion == 'success'
-        working-directory: tests/smoke
-        run: |
-          set +e
-          echo ::group::Bolt inventory
-          bundle exec bolt inventory show --detail
-          echo ::endgroup::
-          docker ps -a --format '{{.ID}}' | xargs -n1 docker logs
-          bundle exec rake litmus:tear_down
-          # ALWAYS exit based on the outcode of the smoke test provision
-          exit ${{ steps.test_image.outcome != 'success' && '1' || '0' }}
-
-      - if: steps.build_image.outcome == 'success' && steps.test_image.outcome == 'success' && needs.select.outputs.push == 'true'
+      - if: steps.build_image.outcome == 'success' && needs.select.outputs.push == 'true'
         name: Push ${{ matrix.image_tag }} to ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
         run: |
           docker image push $IMAGE_TAG

@@ -1,0 +1,133 @@
+---
+name: "Acceptance Test"
+
+inputs:
+  docker_image:
+    required: true
+    type: string
+  repo:
+    required: true
+    type: string
+  ref:
+    type: string
+  provision_task:
+    required: true
+    default: "docker"
+    type: string
+  provision_module:
+    description: 'override provision module in .fixtures.yml'
+    type: string
+  puppet_agent_module:
+    description: 'override puppet_agent module in .fixtures.yml'
+    type: string
+  ruby_version:
+    required: true
+    default: "2.7"
+    type: string
+  path:
+    description: 'working directory (default ${github.workspace}/acceptance_test)'
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - id: vars
+      shell: bash
+      run: |
+        echo "working-directory=${{ inputs.path != '' && inputs.path || format('{0}/acceptance_test', github.workspace) }}" >> "${GITHUB_OUTPUT}"
+
+    - name: Checkout Module (Act)
+      if: github.actor == 'nektos/act'
+      shell: bash
+      run: git clone https://github.com/${{ inputs.repo }} ${{ steps.vars.outputs.working-directory }}
+
+    - name: Checkout Module (Github)
+      if: github.actor != 'nektos/act'
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repo }}
+        ref: ${{ inputs.ref }}
+        path: ${{ steps.vars.outputs.working-directory }}
+
+    - name: Setup Ruby
+      uses: "ruby/setup-ruby@v1"
+      with:
+        ruby-version: ${{ inputs.ruby_version }}
+        bundler-cache: true
+        working-directory: ${{ steps.vars.outputs.working-directory }}
+
+    - name: Custom fixtures
+      if: (inputs.provision_module != '' || inputs.puppet_agent_module != '')
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      shell: ruby {0}
+      run: |
+        require 'yaml'
+        require 'json'
+
+        input = {}
+        input['provision'] = <<INPUT
+        ${{ inputs.provision_module }}
+        INPUT
+        input['puppet_agent'] = <<INPUT
+        ${{ inputs.puppet_agent_module }}
+        INPUT
+
+        input.transform_values! do |v|
+          JSON.parse(v)
+        rescue
+          v.chomp
+        end.reject! { |_, v| v.empty? }
+
+        project = YAML.load_file('.fixtures.yml')
+        project['fixtures']['repositories'].merge!(input)
+        File.write('.fixtures.yml', project.to_yaml)
+
+    - name: Prepare
+      shell: bash
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      run: |
+        mkdir -p rakelib
+        cp ${{ github.action_path }}/action.rake rakelib/litmusimage_$$.rake
+        bundle exec rake spec_prep
+
+    - name: Provision
+      id: provision
+      shell: bash
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      run: |
+        bundle exec rake litmus:provision[${{ inputs.provision_task }},${{ inputs.docker_image }}]
+        bundle exec bolt inventory show --detail -i spec/fixtures/litmus_inventory.yaml
+
+    - name: Install Agent
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      shell: bash
+      run: bundle exec rake litmus:install_agent
+
+    - name: Install Module
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      shell: bash
+      run: |
+        bundle exec rake litmus:install_module
+        bundle exec bolt command run 'puppet module list' -t all -i spec/fixtures/litmus_inventory.yaml
+
+    - name: Run
+      id: run
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      shell: bash
+      run: bundle exec rake litmus:acceptance
+
+    - name: Cleanup
+      if: always()
+      shell: bash
+      working-directory: ${{ steps.vars.outputs.working-directory }}
+      run: |
+        set +e
+        if [[ "${{ steps.provision.outcome }}" == "success" ]] ; then
+          if [[ "${{ steps.run.outcome }}" != "success" ]] ; then
+            bundle exec bolt inventory show --detail -i spec/fixtures/litmus_inventory.yaml
+            docker ps -a --format '{{.ID}}' | xargs -n1 docker logs
+          fi
+          bundle exec rake litmus:tear_down
+        fi
+        # ALWAYS exit based on the outcode of the smoke test provision
+        exit ${{ steps.run.outcome != 'success' && '1' || '0' }}

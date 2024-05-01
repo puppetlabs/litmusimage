@@ -1,0 +1,88 @@
+---
+name: "Smoke Test"
+
+inputs:
+  docker_image:
+    required: true
+    type: string
+  provision_task:
+    required: true
+    default: "docker"
+    type: string
+  provision_module:
+    type: string
+  working_directory:
+    required: true
+    default: "tests/smoke"
+    type: string
+  ruby_version:
+    required: true
+    default: "2.7"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Ruby
+      uses: "ruby/setup-ruby@v1"
+      with:
+        ruby-version: ${{ inputs.ruby_version }}
+        bundler-cache: true
+        working-directory: ${{ inputs.working_directory }}
+
+    - name: Custom provision module
+      if: inputs.provision_module != ''
+      working-directory: tests/smoke
+      shell: ruby
+      run: |
+        require 'yaml'
+        require 'json'
+        input = <<INPUT
+        ${{ inputs.provision_module }}
+        INPUT
+        override = JSON.parse(input)
+        project = YAML.safe_load_file('bolt-project.yaml')
+        project["modules"].each_with_index do |mod, i|
+          project["modules"][i].merge!(override) if mod["name"].eql?('puppetlabs/provision')
+        end
+        File.write('bolt-project.yaml', project.to_yaml)
+
+    - name: Prepare
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        bundle info puppet_litmus
+        bundle exec bolt module install
+        bundle exec bolt module show
+
+    - name: Provision ${{ inputs.docker_image }}
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: bundle exec rake litmus:provision[${{ inputs.provision_task }},${{ inputs.docker_image }}]
+
+    - name: Execute
+      id: run
+      continue-on-error: true
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      run: |
+        echo "testing bolt command"
+        bundle exec bolt command run 'last' -t all
+        echo "testing bolt task"
+        bundle exec bolt task run litmusimage::smoke -t all
+
+    - name: Cleanup
+      if: always()
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        set +e
+        if [[ -f spec/fixtures/litmus_inventory.yaml ]] ; then
+          if [[ "${{ steps.run.outcome }}" != "success" ]] ; then
+            bundle exec bolt inventory show --detail
+            docker ps -a --format '{{.ID}}' | xargs -n1 docker logs
+          fi
+          bundle exec rake litmus:tear_down
+        fi
+        # ALWAYS exit based on the outcode of the smoke test provision
+        exit ${{ steps.run.outcome != 'success' && '1' || '0' }}
