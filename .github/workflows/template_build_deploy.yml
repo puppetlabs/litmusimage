@@ -97,6 +97,7 @@ jobs:
               for i, v in enumerate(builds):
                   builds[i]['image_tag'] = f"{v['image']}:{v['tag']}"
                   builds[i]['base_image_tag'] = f"{v['base_image']}:{v['base_tag']}"
+                  ruilds[i]['platforms'] = ",".join(["linux/" + v for v in v['arch'])
                   builds[i]['refresh'] = refresh
           
           if dockerfile:
@@ -182,10 +183,29 @@ jobs:
           fetch-depth: 1
 
       - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
+        name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+
+      - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
+        name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
         name: Build ${{ matrix.image_tag }}
         id: build_image
-        run: |
-          docker build --rm --no-cache -t ${IMAGE_TAG} . --label "base_image=${BASE_ID}" -f ${{ matrix.dockerfile }}.dockerfile --build-arg BASE_IMAGE_TAG=${{ matrix.base_tag }} --build-arg OS_TYPE=${{ matrix.base_image }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}.dockerfile
+          labels: base_image=${{ env.BASE_ID }}
+          load: true
+          push: false
+          tags: ${{ env.IMAGE_TAG }}
+          platforms: ${{ matrix.platforms }}
+          build-args: |
+            BASE_IMAGE_TAG=${{ matrix.base_tag }}
+            OS_TYPE=${{ matrix.base_image }}
 
       - name: Smoke test (${{ inputs.provision_task }})
         uses: ./.github/actions/smoke-test
@@ -205,5 +225,9 @@ jobs:
 
       - if: steps.build_image.outcome == 'success' && needs.select.outputs.push == 'true'
         name: Push ${{ matrix.image_tag }} to ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
-        run: |
-          docker image push $IMAGE_TAG
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ env.IMAGE_TAG }}
