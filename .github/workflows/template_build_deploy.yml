@@ -26,6 +26,7 @@ on:
         default: ""
         type: string
       acceptance_test:
+        default: ""
         type: string
 
 concurrency:
@@ -224,7 +225,7 @@ jobs:
           provision_module: ${{ inputs.provision_module }}
 
       - name: Acceptance test (${{ inputs.provision_task }})
-        if: inputs.acceptance_test != ''
+        if: ${{ inputs.acceptance.test != 'false' && inputs.acceptance_test != '' }}
         uses: ./.github/actions/acceptance-test
         with:
           docker_image: ${{ env.IMAGE_TAG }}
