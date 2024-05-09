@@ -23,7 +23,7 @@
     { "image": "redhat",          "tag": "9",       "dockerfile": "yum_systemd",        "platforms": ["amd64"],             "base_image": "redhat/ubi9",           "base_tag": "latest" },
     { "image": "debian",          "tag": "10",      "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64"],             "base_image": "debian",                "base_tag": "10" },
     { "image": "debian",          "tag": "11",      "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "debian",                "base_tag": "bullseye" },
-    { "image": "debian",          "tag": "12",      "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64"], "base_image": "debian",                "base_tag": "12" },
+    { "image": "debian",          "tag": "12",      "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "debian",                "base_tag": "12" },
     { "image": "amazonlinux",     "tag": "2023",    "dockerfile": "yum_systemd",        "platforms": ["amd64"],             "base_image": "amazonlinux",           "base_tag": "2023" },
     { "image": "amazonlinux",     "tag": "2",       "dockerfile": "yum_systemd",        "platforms": ["amd64"],             "base_image": "amazonlinux",           "base_tag": "2" },
     { "image": "fedora",          "tag": "36",      "dockerfile": "yum_systemd",        "platforms": ["amd64"],             "base_image": "fedora",                "base_tag": "36" }
