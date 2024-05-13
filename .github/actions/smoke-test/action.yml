@@ -17,7 +17,7 @@ inputs:
     type: string
   ruby_version:
     required: true
-    default: "2.7"
+    default: "3.2"
     type: string
 
 runs:
@@ -33,7 +33,7 @@ runs:
     - name: Custom provision module
       if: inputs.provision_module != ''
       working-directory: tests/smoke
-      shell: ruby
+      shell: ruby {0}
       run: |
         require 'yaml'
         require 'json'
