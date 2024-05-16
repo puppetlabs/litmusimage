@@ -4,6 +4,7 @@ run-name: >
   ${{ inputs.image && format('image={0}', inputs.image) || '' }}
   ${{ inputs.repo && format('repo={0}', inputs.repo) || '' }}
   ${{ inputs.ref && format('ref={0}', inputs.ref) || '' }}
+  on ${{ inputs.runs-on }}
 
 on:
   workflow_dispatch:
@@ -37,6 +38,14 @@ on:
       puppet_agent_module:
         description: puppet_agent module overrides (JSON Hash)
         type: string
+      runs-on:
+        description: run the workflow on
+        default: ubuntu-20.04
+        type: choice
+        options:
+          - ubuntu-latest
+          - ubuntu-22.04
+          - ubuntu-20.04
 
 env:
   REGISTRY: ${{ vars.DOCKER_REGISTRY != '' && vars.DOCKER_REGISTRY || 'ghcr.io' }}
@@ -45,7 +54,7 @@ env:
 
 jobs:
   acceptance:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - name: Setup Vars
         id: vars
