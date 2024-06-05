@@ -3,9 +3,16 @@ ARG OS_TYPE
 
 FROM $OS_TYPE:$BASE_IMAGE_TAG
 
+# Re-declare BASE_IMAGE_TAG ARG
+ARG BASE_IMAGE_TAG
+
 ENV container docker
 
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
+
+RUN if [ "$BASE_IMAGE_TAG" = "stream8" ] ; then (cd /etc/yum.repos.d/; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*;\
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*);\
+fi
 
 RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
 
