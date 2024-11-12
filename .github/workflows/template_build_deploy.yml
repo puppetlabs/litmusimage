@@ -133,7 +133,7 @@ jobs:
   images:
     needs: select
     name: image (${{ matrix.image_tag }})
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       packages: write
