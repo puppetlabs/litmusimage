@@ -40,12 +40,11 @@ on:
         type: string
       runs-on:
         description: run the workflow on
-        default: ubuntu-20.04
+        default: ubuntu-latest
         type: choice
         options:
           - ubuntu-latest
           - ubuntu-22.04
-          - ubuntu-20.04
 
 env:
   REGISTRY: ${{ vars.DOCKER_REGISTRY != '' && vars.DOCKER_REGISTRY || 'ghcr.io' }}
