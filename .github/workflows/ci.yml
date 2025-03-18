@@ -1,4 +1,4 @@
-name: CI/CD
+name: changing name for testing purposes
 
 on:
   pull_request:
