@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 2
       - name: Get changed files
         id: changed-files
-        uses: step-security/changed-files
+        uses: step-security/changed-files@v45
         with:
           json: true
           quotepath: false
