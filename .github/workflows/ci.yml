@@ -1,5 +1,5 @@
-name: changing name for testing purposes
-
+name: CI/CD
+# testing
 on:
   pull_request:
     types: [ opened, synchronize ]
