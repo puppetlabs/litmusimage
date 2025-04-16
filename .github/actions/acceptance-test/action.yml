@@ -22,7 +22,7 @@ inputs:
     type: string
   ruby_version:
     required: true
-    default: "2.7"
+    default: "3.1"
     type: string
   path:
     description: 'working directory (default ${github.workspace}/acceptance_test)'
