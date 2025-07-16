@@ -34,6 +34,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 | rockylinux      | 9       | yum_systemd        | rockylinux/rockylinux                    | 9        |
 | almalinux       | 8       | yum_systemd        | almalinux                                | 8        |
 | almalinux       | 9       | yum_systemd        | almalinux                                | 9        |
+| almalinux       | 10      | yum_systemd        | almalinux                                | 10       |
 | redhat          | 7       | yum_systemd        | registry.access.redhat.com/ubi7/ubi-init | latest   |
 | redhat          | 8       | yum_systemd        | redhat/ubi8-init                         | latest   |
 | redhat          | 9       | yum_systemd        | redhat/ubi9-init                         | latest   |
@@ -49,7 +50,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 ```bash
 docker build --rm --no-cache -t litmusimage/${IMAGE}:${TAG} . \
   -f ${DOCKERFILE}.dockerfile \
-  --build-arg BASE_TAG=${BASE_TAG} \
+  --build-arg BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
   --build-arg OS_TYPE=${BASE_IMAGE}
 ```
 
@@ -60,7 +61,7 @@ BASE_IMAGE=ubuntu
 DOCKERFILE=apt_sysvinit-utils
 IMAGE=ubuntu
 TAG=22.04
-BASE_TAG=${TAG}
+BASE_IMAGE_TAG=${TAG}
 ```
 
 The build command would be:
@@ -68,7 +69,7 @@ The build command would be:
 ```bash
 docker build --rm --no-cache -t litmusimage/ubuntu:22.04 . \
   -f apt_sysvinit-utils.dockerfile \
-  --build-arg BASE_TAG=22.04 \
+  --build-arg BASE_IMAGE_TAG=22.04 \
   --build-arg OS_TYPE=ubuntu
 ```
 
