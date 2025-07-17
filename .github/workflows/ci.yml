@@ -9,7 +9,7 @@ on:
 
 jobs:
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       re_image: ${{ steps.create-inputs.outputs.re_image }}
       re_dockerfile: ${{ steps.create-inputs.outputs.re_dockerfile }}
