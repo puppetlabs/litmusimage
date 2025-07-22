@@ -10,6 +10,7 @@ ARG BASE_IMAGE_TAG
 ENV container docker
 
 # Fix platform architecture issues for v7 systems with Docker platform specification
+# Trigger CI build to test platform-specific Docker pulls
 
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
 
