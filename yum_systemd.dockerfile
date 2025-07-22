@@ -9,7 +9,7 @@ ARG BASE_IMAGE_TAG
 
 ENV container docker
 
-# Test CentOS 7 with ubuntu-22.04 runner for compatibility
+# Fix platform architecture issues for v7 systems with Docker platform specification
 
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
 
