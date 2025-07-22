@@ -205,6 +205,20 @@ jobs:
         name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # === PLATFORM FIX: conditionally override platforms input for build-push-action ===
+      - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
+        name: Determine build platforms
+        id: set_platform
+        run: |
+          case "${{ matrix.image_tag }}" in
+            *centos:7*|*scientificlinux:7*|*oraclelinux:7*|*redhat:7*|amazonlinux:2)
+              echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "platforms=${{ matrix.platforms }}" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
       - if: steps.compare_image.outputs.need_refresh || steps.compare_image.outcome == 'skipped'
         name: Build ${{ matrix.image_tag }}
         id: build_image
@@ -217,7 +231,7 @@ jobs:
           push: false
           provenance: ${{ contains(env.REGISTRY, 'docker') }}
           tags: ${{ env.IMAGE_TAG }}
-          platforms: ${{ matrix.platforms }}
+          platforms: ${{ steps.set_platform.outputs.platforms }}
           build-args: |
             BASE_IMAGE_TAG=${{ matrix.base_tag }}
             OS_TYPE=${{ matrix.base_image }}
@@ -248,7 +262,7 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_TAG }}
           provenance: ${{ contains(env.REGISTRY, 'docker') }}
-          platforms: ${{ matrix.platforms }}
+          platforms: ${{ steps.set_platform.outputs.platforms }}
           build-args: |
             BASE_IMAGE_TAG=${{ matrix.base_tag }}
             OS_TYPE=${{ matrix.base_image }}
