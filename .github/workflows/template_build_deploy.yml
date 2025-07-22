@@ -8,34 +8,8 @@ on:
         default: ""
         type: string
       dockerfile:
-        default: "      - if: matrix.refresh == false
-        name: Pull and compare image ${{ matrix.image_tag }}
-        id: compare_image
-        run: |
-          # Force AMD64 platform for problematic version 7 systems  
-          if [[ "${{ matrix.image_tag }}" =~ (centos|scientificlinux|oraclelinux|redhat):7 ]] || [[ "${{ matrix.image_tag }}" == "amazonlinux:2" ]]; then
-            if docker pull --platform linux/amd64 $IMAGE_TAG ; then
-              IMAGE_BASE_ID=$(docker inspect ${IMAGE_TAG} --format "{{ index .Config.Labels \"base_image\"}}" || true)
-              if [[ "${IMAGE_BASE_ID}" == "${BASE_ID}" ]] ; then
-                echo "no updates to base image since last build, aborting"
-                exit 0
-              fi
-              echo "::notice title=::rebuilding, base image_id does not match"
-            else
-              echo "::notice title=::proceeding, no existing image"
-            fi
-          else
-            if docker pull $IMAGE_TAG ; then
-              IMAGE_BASE_ID=$(docker inspect ${IMAGE_TAG} --format "{{ index .Config.Labels \"base_image\"}}" || true)
-              if [[ "${IMAGE_BASE_ID}" == "${BASE_ID}" ]] ; then
-                echo "no updates to base image since last build, aborting"
-                exit 0
-              fi
-              echo "::notice title=::rebuilding, base image_id does not match"
-            else
-              echo "::notice title=::proceeding, no existing image"
-            fi
-          fi: string
+        default: ""
+        type: string
       refresh:
         type: boolean
         default: false
@@ -196,29 +170,15 @@ jobs:
         name: Pull and compare image ${{ matrix.image_tag }}
         id: compare_image
         run: |
-          # Force AMD64 platform for problematic version 7 systems
-          if [[ "${{ matrix.image_tag }}" =~ (centos|scientificlinux|oraclelinux|redhat):7 ]] || [[ "${{ matrix.image_tag }}" == "amazonlinux:2" ]]; then
-            if docker pull --platform linux/amd64 $IMAGE_TAG ; then
-              IMAGE_BASE_ID=$(docker inspect ${IMAGE_TAG} --format "{{ index .Config.Labels \"base_image\"}}" || true)
-              if [[ "${IMAGE_BASE_ID}" == "${BASE_ID}" ]] ; then
-                echo "no updates to base image since last build, aborting"
-                exit 0
-              fi
-              echo "::notice title=::rebuilding, base image_id does not match"
-            else
-              echo "::notice title=::building, image not found in registry"
+          if docker pull $IMAGE_TAG ; then
+            IMAGE_BASE_ID=$(docker inspect ${IMAGE_TAG} --format "{{ index .Config.Labels \"base_image\"}}" || true)
+            if [[ "${IMAGE_BASE_ID}" == "${BASE_ID}" ]] ; then
+              echo "no updates to base image since last build, aborting"
+              exit 0
             fi
+            echo "::notice title=::rebuilding, base image_id does not match"
           else
-            if docker pull $IMAGE_TAG ; then
-              IMAGE_BASE_ID=$(docker inspect ${IMAGE_TAG} --format "{{ index .Config.Labels \"base_image\"}}" || true)
-              if [[ "${IMAGE_BASE_ID}" == "${BASE_ID}" ]] ; then
-                echo "no updates to base image since last build, aborting"
-                exit 0
-              fi
-              echo "::notice title=::rebuilding, base image_id does not match"
-            else
-              echo "::notice title=::building, image not found in registry"
-            fi
+            echo "::notice title=::building, image not found in registry"
           fi
           echo "need_refresh=true" >> $GITHUB_OUTPUT
 
