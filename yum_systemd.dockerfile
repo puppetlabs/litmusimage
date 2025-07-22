@@ -9,6 +9,8 @@ ARG BASE_IMAGE_TAG
 
 ENV container docker
 
+# Test CentOS 7 with ubuntu-22.04 runner for compatibility
+
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
 
 RUN if [[ ( "$OS_TYPE" = "quay.io/centos/centos" && "$BASE_IMAGE_TAG" = "stream8" ) || ( "$OS_TYPE" = "centos" && "$BASE_IMAGE_TAG" = "7" ) ]]; then \

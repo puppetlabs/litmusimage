@@ -44,7 +44,7 @@ env:
 jobs:
   select:
     name: select
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       push: ${{ steps.branch-names.outputs.is_default }}
@@ -137,7 +137,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 10
       fail-fast: false
@@ -225,7 +225,7 @@ jobs:
           provision_module: ${{ inputs.provision_module }}
 
       - name: Acceptance test (${{ inputs.provision_task }})
-        if: ${{ inputs.acceptance.test != 'false' && inputs.acceptance_test != '' }}
+        if: ${{ inputs.acceptance_test != 'false' && inputs.acceptance_test != '' }}
         uses: ./.github/actions/acceptance-test
         with:
           docker_image: ${{ env.IMAGE_TAG }}
