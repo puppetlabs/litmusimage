@@ -9,8 +9,6 @@ ARG BASE_IMAGE_TAG
 
 ENV container docker
 
-# Test CentOS 7 with ubuntu-22.04 runner for compatibility
-
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
 
 RUN if [[ ( "$OS_TYPE" = "quay.io/centos/centos" && "$BASE_IMAGE_TAG" = "stream8" ) || ( "$OS_TYPE" = "centos" && "$BASE_IMAGE_TAG" = "7" ) ]]; then \
@@ -27,7 +25,9 @@ RUN if [[ ( "$OS_TYPE" = "scientificlinux/sl" && "$BASE_IMAGE_TAG" = "7" ) ]]; t
   done; \
 fi
 
-RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
+RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute; yum -y reinstall dbus; yum clean all; \
+    ssh-keygen -A; \
+    systemctl enable sshd.service
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
@@ -40,4 +40,4 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 STOPSIGNAL SIGRTMIN+3
 
-CMD /usr/sbin/init
+CMD ["/usr/sbin/sshd", "-D"]
