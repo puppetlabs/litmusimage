@@ -27,6 +27,7 @@ fi
 
 RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute; yum -y reinstall dbus; yum clean all; \
     ssh-keygen -A; \
+    if [[ "$OS_TYPE" = "almalinux" && "$BASE_IMAGE_TAG" = "8" ]]; then touch /var/log/wtmp; fi; \
     systemctl enable sshd.service
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
