@@ -32,7 +32,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 | oraclelinux     | 9       | yum_systemd        | oraclelinux                              | 9        |
 | rockylinux      | 8       | yum_systemd        | rockylinux/rockylinux                    | 8        |
 | rockylinux      | 9       | yum_systemd        | rockylinux/rockylinux                    | 9        |
-| almalinux       | 8       | yum_systemd        | almalinux                                | 8        |
+| almalinux       | 8       | yum_systemd_ssh    | almalinux                                | 8        |
 | almalinux       | 9       | yum_systemd        | almalinux                                | 9        |
 | redhat          | 7       | yum_systemd        | registry.access.redhat.com/ubi7/ubi-init | latest   |
 | redhat          | 8       | yum_systemd        | redhat/ubi8-init                         | latest   |

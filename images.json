@@ -16,7 +16,7 @@
     { "image": "oraclelinux",     "tag": "9",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "oraclelinux",           "base_tag": "9" },
     { "image": "rockylinux",      "tag": "8",       "dockerfile": "yum_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "rockylinux/rockylinux", "base_tag": "8" },
     { "image": "rockylinux",      "tag": "9",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "rockylinux/rockylinux", "base_tag": "9" },
-    { "image": "almalinux",       "tag": "8",       "dockerfile": "yum_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "almalinux",             "base_tag": "8" },
+    { "image": "almalinux",       "tag": "8",       "dockerfile": "yum_systemd_ssh",    "platforms": ["amd64", "arm64/v8"], "base_image": "almalinux",             "base_tag": "8" },
     { "image": "almalinux",       "tag": "9",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "almalinux",             "base_tag": "9" },
     { "image": "redhat",          "tag": "7",       "dockerfile": "yum_systemd_ssh",    "platforms": ["amd64"],             "base_image": "registry.access.redhat.com/ubi7/ubi", "base_tag": "latest" },
     { "image": "redhat",          "tag": "8",       "dockerfile": "yum_systemd",        "platforms": ["amd64"],             "base_image": "redhat/ubi8",           "base_tag": "latest" },
