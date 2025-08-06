@@ -44,7 +44,7 @@ env:
 jobs:
   select:
     name: select
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       push: ${{ steps.branch-names.outputs.is_default }}
@@ -137,7 +137,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 10
       fail-fast: false

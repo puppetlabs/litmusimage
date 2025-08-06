@@ -44,7 +44,7 @@ on:
         type: choice
         options:
           - ubuntu-latest
-          - ubuntu-22.04
+          - ubuntu-latest
 
 env:
   REGISTRY: ${{ vars.DOCKER_REGISTRY != '' && vars.DOCKER_REGISTRY || 'ghcr.io' }}
