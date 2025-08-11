@@ -7,7 +7,7 @@ ENV container docker
 
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf
 
-RUN dnf -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute ; \
+RUN dnf -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute wget ; \
     dnf -y reinstall dbus ; \
     dnf clean all
 
