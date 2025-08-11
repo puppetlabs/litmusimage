@@ -27,7 +27,7 @@ RUN if [[ ( "$OS_TYPE" = "scientificlinux/sl" && "$BASE_IMAGE_TAG" = "7" ) ]]; t
   done; \
 fi
 
-RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
+RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute wget; yum -y reinstall dbus; yum clean all; systemctl enable sshd.service
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\

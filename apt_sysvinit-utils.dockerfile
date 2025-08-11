@@ -19,7 +19,7 @@ RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "10" ]; then \
 
 # Install system packages
 RUN apt-get update \
-    && apt-get install -y systemd sysvinit-utils util-linux locales locales-all wget iproute2 apt-transport-https \
+    && apt-get install -y systemd sysvinit-utils util-linux locales locales-all wget iproute2 apt-transport-https wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
