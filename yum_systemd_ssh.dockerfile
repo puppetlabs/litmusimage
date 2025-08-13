@@ -25,7 +25,7 @@ RUN if [[ ( "$OS_TYPE" = "scientificlinux/sl" && "$BASE_IMAGE_TAG" = "7" ) ]]; t
   done; \
 fi
 
-RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute wget; yum -y reinstall dbus; yum clean all; \
+RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-langpack-en iproute curl; yum -y reinstall dbus; yum clean all; \
     ssh-keygen -A; \
     if [[ "$OS_TYPE" = "almalinux" && "$BASE_IMAGE_TAG" = "8" ]]; then touch /var/log/wtmp; fi; \
     systemctl enable sshd.service
