@@ -1,0 +1,5 @@
+{
+  "description": "Test SLES/SUSE repository configuration to verify openSUSE Leap fallback is working",
+  "supports_noop": false,
+  "input_method": "stdin"
+}
