@@ -71,7 +71,7 @@ runs:
         echo "testing bolt task"
         bundle exec bolt task run litmusimage::smoke -t all
         echo "testing SLES repository configuration"
-        bundle exec bolt task run litmusimage::test_sles_repos -t all
+        bundle exec bolt task run litmusimage::test_sles_repos -t all --no-tty --verbose
 
     - name: Cleanup
       if: always()
