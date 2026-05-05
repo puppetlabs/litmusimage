@@ -37,8 +37,8 @@ RUN . /etc/os-release 2>/dev/null || true; \
     if [ "${VERSION_ID%%.*}" = "8" ]; then \
         yum update -y iptables iptables-services 2>/dev/null || true; \
         if [ -x /usr/sbin/iptables-legacy ]; then \
-            alternatives --set iptables  /usr/sbin/iptables-legacy; \
-            alternatives --set ip6tables /usr/sbin/ip6tables-legacy; \
+            alternatives --set iptables  /usr/sbin/iptables-legacy  2>/dev/null || true; \
+            alternatives --set ip6tables /usr/sbin/ip6tables-legacy 2>/dev/null || true; \
         fi; \
     fi
 
