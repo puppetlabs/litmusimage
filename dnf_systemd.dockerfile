@@ -21,7 +21,7 @@ RUN dnf -y install openssh-server openssh-clients systemd initscripts glibc-lang
 # recent enough iptables; Rocky 8 does not, so the update is required there.
 # The alternatives --set calls are idempotent if legacy is already default.
 RUN . /etc/os-release; \
-    if [ "${VERSION_ID%%.*}" = "8" ]; then \
+    if [ "${VERSION_ID%%.*}" = "8" ] && ( [ "$ID" = "rocky" ] || [ "$ID" = "almalinux" ] ); then \
         dnf update -y iptables iptables-services 2>/dev/null || true; \
         if [ -x /usr/sbin/iptables-legacy ]; then \
             alternatives --set iptables  /usr/sbin/iptables-legacy  2>/dev/null || true; \

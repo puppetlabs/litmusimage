@@ -34,7 +34,7 @@ RUN yum -y install openssh-server openssh-clients systemd initscripts glibc-lang
 # RULE_APPEND ENOENT on -m limit rules inside Docker on newer host kernels
 # due to an nft_compat ABI mismatch. The legacy backend bypasses nf_tables.
 RUN . /etc/os-release 2>/dev/null || true; \
-    if [ "${VERSION_ID%%.*}" = "8" ]; then \
+    if [ "${VERSION_ID%%.*}" = "8" ] && [ "$ID" = "centos" ]; then \
         yum update -y iptables iptables-services 2>/dev/null || true; \
         if [ -x /usr/sbin/iptables-legacy ]; then \
             alternatives --set iptables  /usr/sbin/iptables-legacy  2>/dev/null || true; \
