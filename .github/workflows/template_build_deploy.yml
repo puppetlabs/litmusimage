@@ -28,6 +28,10 @@ on:
       acceptance_test:
         default: ""
         type: string
+      gated:
+        description: "gate Puppetcore-using matrix entries behind the puppetcore environment (required reviewers). Set false for trusted workflows like the nightly cron."
+        default: true
+        type: boolean
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -134,6 +138,11 @@ jobs:
     needs: select
     name: image (${{ matrix.image_tag }})
     timeout-minutes: 15
+    # Only matrix entries with `puppet_collection` set in images.json release
+    # PUPPETCORE_TOKEN, and only when `gated` is true (default). Nightly cron
+    # passes gated=false to skip the approval prompt on those entries; it
+    # doesn't run acceptance anyway so it doesn't need the token.
+    environment: ${{ inputs.gated && matrix.puppet_collection != '' && 'puppetcore' || '' }}
     permissions:
       contents: read
       packages: write
@@ -232,6 +241,8 @@ jobs:
           repo: ${{ inputs.acceptance_test }}
           provision_task: ${{ inputs.provision_task }}
           provision_module: ${{ inputs.provision_module }}
+          collection: ${{ matrix.puppet_collection || '' }}
+          forge_token: ${{ matrix.puppet_collection != '' && secrets.PUPPETCORE_TOKEN || '' }}
 
       - if: steps.build_image.outcome == 'success' && needs.select.outputs.push == 'true'
         name: Push ${{ matrix.image_tag }} to ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
