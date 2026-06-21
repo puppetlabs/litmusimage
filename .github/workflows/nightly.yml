@@ -9,4 +9,5 @@ jobs:
     uses: ./.github/workflows/template_build_deploy.yml
     with:
       image: .*
+      gated: false
     secrets: inherit

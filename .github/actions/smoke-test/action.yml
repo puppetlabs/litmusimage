@@ -67,9 +67,11 @@ runs:
       shell: bash
       run: |
         echo "testing bolt command"
-        bundle exec bolt command run 'last' -t all
+        bundle exec bolt command run 'uname -a' -t all
         echo "testing bolt task"
         bundle exec bolt task run litmusimage::smoke -t all
+        echo "testing SLES repository configuration"
+        bundle exec bolt task run litmusimage::test_sles_repos -t all --no-tty --verbose
 
     - name: Cleanup
       if: always()

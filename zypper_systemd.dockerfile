@@ -5,7 +5,17 @@ FROM $OS_TYPE:$BASE_IMAGE_TAG
 
 ENV container docker
 
-RUN zypper ref -s ; zypper -n install openssh-server systemd glibc-locale-base iproute2 gzip bzip2 ; zypper -n install --force dbus-1 ; zypper -n clean --all ; systemctl enable sshd
+# Add openSUSE Leap repository if no repos are configured (workaround for unregistered SLES BYOS images)
+RUN if ! zypper lr 2>/dev/null | grep -q 'http'; then \
+      zypper --non-interactive --gpg-auto-import-keys ar http://download.opensuse.org/distribution/leap/15.6/repo/oss/ opensuse-leap-fallback && \
+      zypper --non-interactive --gpg-auto-import-keys ref -s; \
+    else \
+      zypper ref -s; \
+    fi && \
+    zypper -n install openssh-server systemd glibc-locale-base iproute2 gzip bzip2 && \
+    zypper -n install --force dbus-1 && \
+    zypper -n clean --all && \
+    systemctl enable sshd
 
 RUN echo "LANG=en_US.UTF-8" >/etc/locale.conf ; echo "KEYMAP=us" >/etc/vconsole.conf
 

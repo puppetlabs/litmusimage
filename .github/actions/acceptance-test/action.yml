@@ -27,6 +27,16 @@ inputs:
   path:
     description: 'working directory (default ${github.workspace}/acceptance_test)'
     type: string
+  collection:
+    description: 'puppet_agent collection (e.g. puppetcore8); empty = puppet_agent default'
+    required: false
+    default: ""
+    type: string
+  forge_token:
+    description: 'Puppetcore Forge token; required when collection starts with puppetcore'
+    required: false
+    default: ""
+    type: string
 
 runs:
   using: "composite"
@@ -48,6 +58,15 @@ runs:
         repository: ${{ inputs.repo }}
         ref: ${{ inputs.ref }}
         path: ${{ steps.vars.outputs.working-directory }}
+
+    - name: Configure forge authentication
+      if: inputs.forge_token != ''
+      shell: bash
+      env:
+        FORGE_TOKEN: ${{ inputs.forge_token }}
+      run: |
+        echo "PUPPET_FORGE_TOKEN=$FORGE_TOKEN" >> "$GITHUB_ENV"
+        echo "BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM=forge-key:$FORGE_TOKEN" >> "$GITHUB_ENV"
 
     - name: Setup Ruby
       uses: "ruby/setup-ruby@v1"
@@ -101,7 +120,25 @@ runs:
     - name: Install Agent
       working-directory: ${{ steps.vars.outputs.working-directory }}
       shell: bash
-      run: bundle exec rake litmus:install_agent
+      run: |
+        case "${{ inputs.collection }}" in
+          puppetcore*)
+            # install_shell.sh can't bootstrap on codenames where Puppetcore hasn't
+            # published /public/puppet<N>-release-<codename>.deb (e.g. trixie).
+            # See .github/actions/install-puppetcore/install_puppetcore_agent.sh.
+            bundle exec bolt script run \
+              "${{ github.action_path }}/../install-puppetcore/install_puppetcore_agent.sh" \
+              "${{ inputs.collection }}" "${{ inputs.forge_token }}" \
+              --targets all --tmpdir /tmp \
+              --inventoryfile spec/fixtures/litmus_inventory.yaml
+            ;;
+          ?*)
+            bundle exec rake "litmus:install_agent[${{ inputs.collection }}]"
+            ;;
+          *)
+            bundle exec rake litmus:install_agent
+            ;;
+        esac
 
     - name: Install Module
       working-directory: ${{ steps.vars.outputs.working-directory }}
