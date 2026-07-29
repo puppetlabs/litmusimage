@@ -12,7 +12,7 @@
     { "image": "scientificlinux", "tag": "7",       "dockerfile": "yum_systemd_ssh",    "platforms": ["amd64"],             "base_image": "scientificlinux/sl",    "base_tag": "7" },
     { "image": "oraclelinux",     "tag": "6",       "dockerfile": "yum_initd",          "platforms": ["amd64"],             "base_image": "oraclelinux",           "base_tag": "6" },
     { "image": "oraclelinux",     "tag": "7",       "dockerfile": "yum_systemd_ssh",    "platforms": ["amd64", "arm64/v8"], "base_image": "oraclelinux",           "base_tag": "7" },
-    { "image": "oraclelinux",     "tag": "8",       "dockerfile": "yum_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "oraclelinux",           "base_tag": "8" },
+    { "image": "oraclelinux",     "tag": "8",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "oraclelinux",           "base_tag": "8" },
     { "image": "oraclelinux",     "tag": "9",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "oraclelinux",           "base_tag": "9" },
     { "image": "rockylinux",      "tag": "8",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "rockylinux/rockylinux", "base_tag": "8" },
     { "image": "rockylinux",      "tag": "9",       "dockerfile": "dnf_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "rockylinux/rockylinux", "base_tag": "9" },
