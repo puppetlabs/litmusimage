@@ -28,7 +28,7 @@ Images get [uploaded automatically][2] and are rebuilt [nightly if necessary][3]
 | sles            | 15      | zypper_systemd     | registry.suse.com/suse/sle15             | 15.5     |
 | oraclelinux     | 6       | yum_initd          | oraclelinux                              | 6        |
 | oraclelinux     | 7       | yum_systemd        | oraclelinux                              | 7        |
-| oraclelinux     | 8       | yum_systemd        | oraclelinux                              | 8        |
+| oraclelinux     | 8       | dnf_systemd        | oraclelinux                              | 8        |
 | oraclelinux     | 9       | yum_systemd        | oraclelinux                              | 9        |
 | rockylinux      | 8       | yum_systemd        | rockylinux/rockylinux                    | 8        |
 | rockylinux      | 9       | yum_systemd        | rockylinux/rockylinux                    | 9        |
