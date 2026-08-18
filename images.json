@@ -3,6 +3,7 @@
     { "image": "ubuntu",          "tag": "20.04",   "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "ubuntu",                "base_tag": "20.04" },
     { "image": "ubuntu",          "tag": "22.04",   "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "ubuntu",                "base_tag": "22.04" },
     { "image": "ubuntu",          "tag": "24.04",   "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "ubuntu",                "base_tag": "24.04" },
+    { "image": "ubuntu",          "tag": "26.04",   "dockerfile": "apt_sysvinit-utils", "platforms": ["amd64", "arm64/v8"], "base_image": "ubuntu",                "base_tag": "26.04", "puppet_collection": "puppetcore8" },
     { "image": "centos",          "tag": "6",       "dockerfile": "yum_initd",          "platforms": ["amd64"],             "base_image": "centos",                "base_tag": "6" },
     { "image": "centos",          "tag": "7",       "dockerfile": "yum_systemd_ssh",    "platforms": ["amd64"],             "base_image": "centos",                "base_tag": "7" },
     { "image": "centos",          "tag": "stream8", "dockerfile": "yum_systemd",        "platforms": ["amd64", "arm64/v8"], "base_image": "quay.io/centos/centos", "base_tag": "stream8" },
