@@ -17,6 +17,13 @@ RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "10" ]; then \
         echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until; \
     fi
 
+# Drop the bullseye-security repo (EOL, unreliable) and downgrade libsystemd0 to match main
+RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "11" ]; then \
+        sed -i '/bullseye-security/d' /etc/apt/sources.list && \
+        apt-get update && \
+        apt-get install -y --allow-downgrades "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')"; \
+    fi
+
 # Install system packages
 RUN apt-get update \
     && apt-get install -y systemd sysvinit-utils util-linux locales locales-all wget iproute2 apt-transport-https wget \
