@@ -18,7 +18,7 @@ RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "10" ]; then \
     fi
 
 # Drop the bullseye-security repo (EOL, unreliable) and downgrade libsystemd0 to match main
-RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "11" ]; then \
+RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "bullseye" ]; then \
         sed -i '/bullseye-security/d' /etc/apt/sources.list && \
         apt-get update && \
         apt-get install -y --allow-downgrades "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')"; \
