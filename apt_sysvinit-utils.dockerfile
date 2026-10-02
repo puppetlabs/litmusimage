@@ -17,11 +17,14 @@ RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "10" ]; then \
         echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until; \
     fi
 
-# Drop the bullseye-security repo (EOL, unreliable) and downgrade libsystemd0 to match main
+# Drop the bullseye-security repo (EOL, unreliable), downgrade libsystemd0 to match main,
+# and hold perl-base to prevent a runtime conflict where perl=deb11u3 requires perl-base=deb11u3
+# exactly but apt would otherwise select perl-base=deb11u5 (released without a matching perl).
 RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "bullseye" ]; then \
         sed -i '/bullseye-security/d' /etc/apt/sources.list && \
         apt-get update && \
-        apt-get install -y --allow-downgrades "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')"; \
+        apt-get install -y --allow-downgrades "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')" && \
+        apt-mark hold perl-base; \
     fi
 
 # Install system packages
