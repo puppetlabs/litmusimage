@@ -26,7 +26,7 @@ RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "bullseye" ]; then \
         apt-get install -y --allow-downgrades \
             "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')" \
             "perl-base=$(apt-cache policy perl | awk '/Candidate/{print $2}')" && \
-        apt-mark hold perl-base;
+        apt-mark hold perl-base; \
     fi
 
 # Install system packages
