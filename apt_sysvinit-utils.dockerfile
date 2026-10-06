@@ -10,18 +10,11 @@ ARG BASE_IMAGE_TAG
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
 
-# Redirect Debian 10 sources to archive.debian.org to fix expired repo issues
-RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "10" ]; then \
+# Debian 10 and 11 (bullseye) are EOL: redirect apt to archive.debian.org (the deb.debian.org/debian prefix also covers debian-security)
+RUN if [ "$OS_TYPE" = "debian" ] && { [ "$BASE_IMAGE_TAG" = "10" ] || [ "$BASE_IMAGE_TAG" = "bullseye" ]; }; then \
         sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
         sed -i 's|http://security.debian.org|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
         echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until; \
-    fi
-
-# Drop the bullseye-security repo (EOL, unreliable) and downgrade libsystemd0 to match main
-RUN if [ "$OS_TYPE" = "debian" ] && [ "$BASE_IMAGE_TAG" = "bullseye" ]; then \
-        sed -i '/bullseye-security/d' /etc/apt/sources.list && \
-        apt-get update && \
-        apt-get install -y --allow-downgrades "libsystemd0=$(apt-cache policy systemd | awk '/Candidate/{print $2}')"; \
     fi
 
 # Install system packages
