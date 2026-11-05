@@ -68,7 +68,7 @@ The build command would be:
 ```bash
 docker build --rm --no-cache -t litmusimage/ubuntu:22.04 . \
   -f apt_sysvinit-utils.dockerfile \
-  --build-arg BASE_TAG=22.04 \
+  --build-arg BASE_IMAGE_TAG=22.04 \
   --build-arg OS_TYPE=ubuntu
 ```
 
