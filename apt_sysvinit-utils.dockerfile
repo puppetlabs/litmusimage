@@ -38,13 +38,13 @@ ENV LC_ALL en_US.UTF-8
 # Profile tweak
 RUN sed -i "s/.*mesg\s.*/tty -s \&\& mesg n/g" /root/.profile
 
-# Minimize systemd units
+# Minimize systemd units. Keep systemd-tmpfiles-setup (creates /run/lock;
+# matches the yum/dnf/zypper dockerfiles, which already preserve it).
 RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
     /lib/systemd/system/sockets.target.wants/*udev* \
     /lib/systemd/system/sockets.target.wants/*initctl* \
-    /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
     /lib/systemd/system/systemd-update-utmp*
 
 STOPSIGNAL SIGRTMIN+3
