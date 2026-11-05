@@ -38,14 +38,8 @@ ENV LC_ALL en_US.UTF-8
 # Profile tweak
 RUN sed -i "s/.*mesg\s.*/tty -s \&\& mesg n/g" /root/.profile
 
-# Minimize systemd units. Keep systemd-tmpfiles-setup enabled (matching the
-# yum/dnf/zypper dockerfiles in this repo, which already preserve it): it's
-# what creates /run/lock and other FHS runtime dirs that packages assume
-# exist. Older systemd releases created /run/lock unconditionally during
-# early boot regardless of tmpfiles.d, which masked this unit being disabled
-# here; newer systemd (e.g. Ubuntu 26.04) no longer does, so without this
-# unit /run/lock never gets created and anything that writes a lock file
-# there at startup (e.g. ntpsec's ntp-systemd-wrapper) fails.
+# Minimize systemd units. Keep systemd-tmpfiles-setup (creates /run/lock;
+# matches the yum/dnf/zypper dockerfiles, which already preserve it).
 RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
